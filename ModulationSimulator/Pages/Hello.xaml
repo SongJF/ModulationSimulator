@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="ModulationSimulator.Pages.Hello"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ModulationSimulator.Pages"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="625" d:DesignWidth="1200">
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0 80 0 70" HorizontalAlignment="Center">
+                <Image Source="/StaticResource/theme.ico" Margin="10" Width="100"/>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Style="{StaticResource MaterialDesignDisplay2TextBlock}" HorizontalAlignment="Center">
+                        欢迎使用模拟调制可视化程序
+                    </TextBlock>
+                    <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="10" Click="GotoGithub">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="GithubCircle" />
+                            <TextBlock Margin="8 0 0 0">在Github上浏览源码</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+
+            <materialDesign:Card
+                HorizontalAlignment="Center"
+                Width="750"  Padding="20">
+                <StackPanel>
+                    <TextBlock FontSize="20">我可以做些什么？</TextBlock>
+                    <TextBlock Margin="10">■ 多个可选的的仿真实验</TextBlock>
+                    <TextBlock Margin="10">■ 可方便导出的实验数据</TextBlock>
+                    <TextBlock Margin="10">■ 可自定义的全局变量</TextBlock>
+                    <TextBlock Margin="10">■ 实时改变的实验参数与即时反馈</TextBlock>
+                    <TextBlock Margin="10">■ 与实验对应的原理解析与操作教程</TextBlock>
+
+                </StackPanel>
+            </materialDesign:Card>
+        </StackPanel>
+    </Grid>
+</UserControl>
