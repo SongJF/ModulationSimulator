@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +20,39 @@ namespace DrawChart
     /// <summary>
     /// Canvas.xaml 的交互逻辑
     /// </summary>
-    public partial class Canvas : UserControl
+    public partial class ChartCanvas : UserControl
     {
-        public Canvas()
+        public SeriesCollection _seriesCollection { get; set; }
+        public ChartCanvas()
         {
             InitializeComponent();
+
+            //初始化图表序列
+            _seriesCollection = new SeriesCollection()
+            {
+                new LineSeries
+                {
+                    Title= Properties.Resources.ChartTitle_Trans,
+                    Values= new ChartValues<Double> (),
+                    PointGeometry = null,
+                    LineSmoothness= 0
+                }
+            };
+            //数据绑定
+            DataContext = this;
+
+            InitWave();
+        }
+
+        /// <summary>
+        /// 生成初始化正弦波
+        /// </summary>
+        private void InitWave()
+        {
+            for (int i = 0; i < 256; i++)
+            {
+                _seriesCollection[0].Values.Add(Math.Sin(Math.PI * i * 4 / 180));
+            }
         }
     }
 }

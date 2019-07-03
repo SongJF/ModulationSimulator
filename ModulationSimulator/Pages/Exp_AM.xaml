@@ -33,7 +33,7 @@
             
             <!--图表边框-->
             <Grid>
-                <DrawChart:Canvas Margin="10"/>
+                <DrawChart:ChartCanvas Margin="10"/>
             </Grid>
         </DockPanel>
     </Grid>
