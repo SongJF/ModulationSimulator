@@ -16,15 +16,19 @@
                 DockPanel.Dock="Right">
                 <StackPanel>
                     <TextBlock Style="{StaticResource MaterialDesignHeadlineTextBlock}" HorizontalAlignment="Center" Margin=" 0 10 0 0">
-                        频率调制
+                        幅度调制
                     </TextBlock>
                     <GroupBox
                         Header="可选参数"
                         Margin="16">
-                        <TextBox x:Name="TextBox_Frequency" 
-                         materialDesign:HintAssist.Hint="频率" 
-                         materialDesign:HintAssist.IsFloating="True">
-                        </TextBox>
+                        <StackPanel>
+                            <TextBlock>调制度</TextBlock>
+                            <Slider Minimum="0.0"
+                                    Maximum="2.0"
+                                    Value="{Binding _Ka,Mode=TwoWay}"
+                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                    VerticalAlignment="Center" TickFrequency="0.1"/>
+                        </StackPanel>
                     </GroupBox>
                     <GroupBox
                         Header="图表缩放"
@@ -44,8 +48,10 @@
                                     VerticalAlignment="Center" TickFrequency="5"/>
                         </StackPanel>
                     </GroupBox>
-                    <StackPanel Margin="15">
-                        <Button Click="Click_MakeTransWave">绘制发射波</Button>
+                    <StackPanel Margin="10">
+                        <Button Click="Click_MakeSource" Margin="5">生成源和载波</Button>
+                        <Button Click="Click_MakeTransWave" Margin="5">调制发射波</Button>
+                        <Button Click="Click_ClearChart" Margin="5">清空图表</Button>
                     </StackPanel>
                 </StackPanel>
             </materialDesign:Card>

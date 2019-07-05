@@ -5,6 +5,7 @@ using LiveCharts.Wpf;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace DrawChart
 {
@@ -32,17 +33,25 @@ namespace DrawChart
             DataContext = this;
         }
 
+        #region 封装的公开方法
         public void AddLineSeries(string tiltle, List<double> data)
         {
-            //去重复
+            //去重
             if (_seriesCollection.FirstOrDefault(p => p.Title == tiltle) != null) return;
             _seriesCollection.Add(new LineSeries
             {
                 Title = tiltle,
+                Fill = Brushes.Transparent,
                 Values = new ChartValues<double>(data),
                 PointGeometry = null,
                 LineSmoothness = 0
             });
         }
+
+        public void ClearChart()
+        {
+            _seriesCollection.Clear();
+        }
+        #endregion
     }
 }

@@ -95,14 +95,5 @@ namespace ModulationSimulator.Properties {
                 return ResourceManager.GetString("SnakeMSG_Welcome", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   查找类似 发射波 的本地化字符串。
-        /// </summary>
-        public static string Text_TransWave {
-            get {
-                return ResourceManager.GetString("Text_TransWave", resourceCulture);
-            }
-        }
     }
 }

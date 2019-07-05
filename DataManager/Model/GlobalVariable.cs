@@ -8,7 +8,7 @@ namespace DataManager.Model
 {
     public class GlobalVariable
     {
-        public static void SetValue(int bitNums = 256, int fps = 1)
+        public static void SetValue(int bitNums = 1024, int fps = 1)
         {
             BitNumbers = bitNums;
             FPS = fps;

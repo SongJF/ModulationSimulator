@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="625" d:DesignWidth="1000">
     <Grid>
-        <lvc:CartesianChart Series="{Binding _seriesCollection}" LegendLocation="Right" >
+        <lvc:CartesianChart Series="{Binding _seriesCollection}" LegendLocation="Right" DisableAnimations="True">
             <lvc:CartesianChart.AxisY>
                 <!--<lvc:Axis Title="V" Name="xAxis" LabelFormatter="{Binding _YFormatter}"></lvc:Axis>-->
                 <lvc:Axis Title="V" Name="yAxis"></lvc:Axis>
