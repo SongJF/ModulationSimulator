@@ -129,4 +129,7 @@
   <data name="SnakeMSG_Welcome" xml:space="preserve">
     <value>欢迎</value>
   </data>
+  <data name="Text_TransWave" xml:space="preserve">
+    <value>发射波</value>
+  </data>
 </root>

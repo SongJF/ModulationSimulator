@@ -26,14 +26,33 @@
                          materialDesign:HintAssist.IsFloating="True">
                         </TextBox>
                     </GroupBox>
-                    
+                    <GroupBox
+                        Header="图表缩放"
+                        Margin="16">
+                        <StackPanel>
+                            <TextBlock>最小值</TextBlock>
+                            <Slider Minimum="{Binding _chartCanvas._chartZooming.Min,Mode=TwoWay}"
+                                    Maximum="{Binding _chartCanvas._chartZooming.Max,Mode=TwoWay}"
+                                    Value="{Binding _chartCanvas._chartZooming.Start,Mode=TwoWay}"
+                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                    VerticalAlignment="Center" TickFrequency="5"/>
+                            <TextBlock>最大值</TextBlock>
+                            <Slider Minimum="{Binding _chartCanvas._chartZooming.Min,Mode=TwoWay}"
+                                    Maximum="{Binding _chartCanvas._chartZooming.Max,Mode=TwoWay}"
+                                    Value="{Binding _chartCanvas._chartZooming.End,Mode=TwoWay}"
+                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                    VerticalAlignment="Center" TickFrequency="5"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <StackPanel Margin="15">
+                        <Button Click="Click_MakeTransWave">绘制发射波</Button>
+                    </StackPanel>
                 </StackPanel>
-                
             </materialDesign:Card>
             
             <!--图表边框-->
             <Grid>
-                <DrawChart:ChartCanvas Margin="10"/>
+                <DrawChart:ChartCanvas x:Name="ChartCanvas" Margin="10"/>
             </Grid>
         </DockPanel>
     </Grid>

@@ -1,19 +1,9 @@
-﻿using LiveCharts;
+﻿using DrawChart.Model;
+using LiveCharts;
 using LiveCharts.Wpf;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DrawChart
 {
@@ -23,36 +13,35 @@ namespace DrawChart
     public partial class ChartCanvas : UserControl
     {
         public SeriesCollection _seriesCollection { get; set; }
+
+        public ChartZooming _chartZooming { get; set; }
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
         public ChartCanvas()
         {
             InitializeComponent();
 
             //初始化图表序列
-            _seriesCollection = new SeriesCollection()
-            {
-                new LineSeries
-                {
-                    Title= Properties.Resources.ChartTitle_Trans,
-                    Values= new ChartValues<Double> (),
-                    PointGeometry = null,
-                    LineSmoothness= 0
-                }
-            };
+            _seriesCollection = new SeriesCollection();
+            //TODO
+            _chartZooming = new ChartZooming(0,256);
             //数据绑定
             DataContext = this;
-
-            InitWave();
         }
 
-        /// <summary>
-        /// 生成初始化正弦波
-        /// </summary>
-        private void InitWave()
+        public void AddLineSeries(string tiltle, List<double> data)
         {
-            for (int i = 0; i < 256; i++)
+            //去重复
+            if (_seriesCollection.FirstOrDefault(p => p.Title == tiltle) != null) return;
+            _seriesCollection.Add(new LineSeries
             {
-                _seriesCollection[0].Values.Add(Math.Sin(Math.PI * i * 4 / 180));
-            }
+                Title = tiltle,
+                Values = new ChartValues<double>(data),
+                PointGeometry = null,
+                LineSmoothness = 0
+            });
         }
     }
 }

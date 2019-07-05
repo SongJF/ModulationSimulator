@@ -45,7 +45,7 @@ namespace ModulationSimulator
             return MainSnackbar.MessageQueue;
         }
 
-        #region Listener
+        #region Click事件
         /// <summary>
         /// 窗口关闭
         /// </summary>

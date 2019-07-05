@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DrawChart;
+using DrawChart.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,24 @@ namespace ModulationSimulator.Pages
     /// </summary>
     public partial class Exp_AM : UserControl
     {
+        public ChartCanvas _chartCanvas { get; set; }
         public Exp_AM()
         {
             InitializeComponent();
+
+            _chartCanvas = ChartCanvas;
+
+            DataContext = this;
+        }
+
+        private void Click_MakeTransWave(object sender, RoutedEventArgs e)
+        {
+            List<double> data = new List<double>();
+            for (int i = 0; i < 256; i++)
+            {
+                data.Add(Math.Sin(Math.PI * i * 4 / 180));
+            }
+            _chartCanvas.AddLineSeries(Properties.Resources.Text_TransWave, data);
         }
     }
 }

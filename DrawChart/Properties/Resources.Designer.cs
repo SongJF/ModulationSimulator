@@ -61,6 +61,15 @@ namespace DrawChart.Properties {
         }
         
         /// <summary>
+        ///   查找类似 接收波 的本地化字符串。
+        /// </summary>
+        public static string ChartTitle_Reci {
+            get {
+                return ResourceManager.GetString("ChartTitle_Reci", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 发射波 的本地化字符串。
         /// </summary>
         public static string ChartTitle_Trans {

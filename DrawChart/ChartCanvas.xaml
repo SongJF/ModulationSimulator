@@ -9,12 +9,16 @@
              d:DesignHeight="625" d:DesignWidth="1000">
     <Grid>
         <lvc:CartesianChart Series="{Binding _seriesCollection}" LegendLocation="Right" >
-            <!--<lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Sales" LabelFormatter="{Binding _YFormatter}"></lvc:Axis>
-            </lvc:CartesianChart.AxisY>-->
-            <!--<lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Month" Labels="{Binding _Labels}"></lvc:Axis>
-            </lvc:CartesianChart.AxisX>-->
+            <lvc:CartesianChart.AxisY>
+                <!--<lvc:Axis Title="V" Name="xAxis" LabelFormatter="{Binding _YFormatter}"></lvc:Axis>-->
+                <lvc:Axis Title="V" Name="yAxis"></lvc:Axis>
+            </lvc:CartesianChart.AxisY>
+            <lvc:CartesianChart.AxisX>
+                <!--<lvc:Axis Title="Bit" Name="yAxis" LabelFormatter="{Binding _XFormatter}" Labels="{Binding _Labels}"></lvc:Axis>-->
+                <lvc:Axis Title="Bit" Name="xAxis" 
+                          MinValue="{Binding _chartZooming.Start, Mode=TwoWay}" 
+                          MaxValue="{Binding _chartZooming.End ,Mode=TwoWay}" ></lvc:Axis>
+            </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
     </Grid>
 </UserControl>
