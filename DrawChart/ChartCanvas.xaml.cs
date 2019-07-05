@@ -34,6 +34,11 @@ namespace DrawChart
         }
 
         #region 封装的公开方法
+        /// <summary>
+        /// 添加一个数据序列
+        /// </summary>
+        /// <param name="tiltle">系列名称</param>
+        /// <param name="data">数据</param>
         public void AddLineSeries(string tiltle, List<double> data)
         {
             //去重
@@ -48,6 +53,20 @@ namespace DrawChart
             });
         }
 
+        /// <summary>
+        /// 清除一个数据序列
+        /// </summary>
+        /// <param name="name">系列名称</param>
+        public void RemoveLineSeries(string name)
+        {
+            var series = _seriesCollection.FirstOrDefault(p => p.Title == name);
+            if (series == null) return;
+            _seriesCollection.Remove(series);
+        }
+
+        /// <summary>
+        /// 清空图表
+        /// </summary>
         public void ClearChart()
         {
             _seriesCollection.Clear();

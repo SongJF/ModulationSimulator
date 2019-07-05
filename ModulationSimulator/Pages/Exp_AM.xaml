@@ -36,10 +36,10 @@
                         <StackPanel>
                             <TextBlock>最小值</TextBlock>
                             <Slider Minimum="{Binding _chartCanvas._chartZooming.Min,Mode=TwoWay}"
-                                    Maximum="{Binding _chartCanvas._chartZooming.Max,Mode=TwoWay}"
-                                    Value="{Binding _chartCanvas._chartZooming.Start,Mode=TwoWay}"
-                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
-                                    VerticalAlignment="Center" TickFrequency="5"/>
+                                Maximum="{Binding _chartCanvas._chartZooming.Max,Mode=TwoWay}"
+                                Value="{Binding _chartCanvas._chartZooming.Start,Mode=TwoWay}"
+                                Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                VerticalAlignment="Center" TickFrequency="5"/>
                             <TextBlock>最大值</TextBlock>
                             <Slider Minimum="{Binding _chartCanvas._chartZooming.Min,Mode=TwoWay}"
                                     Maximum="{Binding _chartCanvas._chartZooming.Max,Mode=TwoWay}"
@@ -51,15 +51,19 @@
                     <StackPanel Margin="10">
                         <Button Click="Click_MakeSource" Margin="5">生成源和载波</Button>
                         <Button Click="Click_MakeTransWave" Margin="5">调制发射波</Button>
+                        <Button Click="Click_ClearSource" Margin="5">清除源和载波</Button>
                         <Button Click="Click_ClearChart" Margin="5">清空图表</Button>
                     </StackPanel>
                 </StackPanel>
             </materialDesign:Card>
-            
+
             <!--图表边框-->
-            <Grid>
-                <DrawChart:ChartCanvas x:Name="ChartCanvas" Margin="10"/>
-            </Grid>
+            <StackPanel>
+                <TextBlock Style="{StaticResource MaterialDesignHeadlineTextBlock}" HorizontalAlignment="Center" Margin=" 0 10 0 0">
+                        发信端
+                </TextBlock>
+                <DrawChart:ChartCanvas x:Name="ChartCanvas" Height="500" Margin="10"/>
+            </StackPanel>
         </DockPanel>
     </Grid>
 </UserControl>

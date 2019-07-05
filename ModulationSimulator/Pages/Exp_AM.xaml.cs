@@ -1,21 +1,9 @@
 ﻿using DataManager.ToolBox.Modulator;
 using DataManager.ToolBox.Transmitters;
 using DrawChart;
-using DrawChart.Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ModulationSimulator.Pages
 {
@@ -60,6 +48,12 @@ namespace ModulationSimulator.Pages
 
             _chartCanvas.AddLineSeries("载波", _carry_Wave);
             _chartCanvas.AddLineSeries("信号", _sourceWave);
+        }
+
+        private void Click_ClearSource(object sender, RoutedEventArgs e)
+        {
+            _chartCanvas.RemoveLineSeries("载波");
+            _chartCanvas.RemoveLineSeries("信号");
         }
     }
 }
