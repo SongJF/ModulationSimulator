@@ -1,4 +1,5 @@
-﻿using DrawChart;
+﻿using DataManager.ToolBox.Transmitters;
+using DrawChart;
 using DrawChart.Model;
 using System;
 using System.Collections.Generic;
@@ -32,14 +33,13 @@ namespace ModulationSimulator.Pages
             DataContext = this;
         }
 
+
+        #region Events
         private void Click_MakeTransWave(object sender, RoutedEventArgs e)
         {
-            List<double> data = new List<double>();
-            for (int i = 0; i < 256; i++)
-            {
-                data.Add(Math.Sin(Math.PI * i * 4 / 180));
-            }
-            _chartCanvas.AddLineSeries(Properties.Resources.Text_TransWave, data);
+            
+            _chartCanvas.AddLineSeries(Properties.Resources.Text_TransWave, Electrical.Sin());
         }
+        #endregion
     }
 }

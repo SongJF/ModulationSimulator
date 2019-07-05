@@ -1,4 +1,5 @@
-﻿using DrawChart.Model;
+﻿using DataManager.Model;
+using DrawChart.Model;
 using LiveCharts;
 using LiveCharts.Wpf;
 using System.Collections.Generic;
@@ -25,8 +26,8 @@ namespace DrawChart
 
             //初始化图表序列
             _seriesCollection = new SeriesCollection();
-            //TODO
-            _chartZooming = new ChartZooming(0,256);
+            //设置缩放值
+            _chartZooming = new ChartZooming(0, GlobalVariable.BitNumbers);
             //数据绑定
             DataContext = this;
         }
