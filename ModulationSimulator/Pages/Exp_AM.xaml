@@ -19,18 +19,6 @@
                         幅度调制
                     </TextBlock>
                     <GroupBox
-                        Header="可选参数"
-                        Margin="16">
-                        <StackPanel>
-                            <TextBlock>调制度</TextBlock>
-                            <Slider Minimum="0.0"
-                                    Maximum="2.0"
-                                    Value="{Binding _Ka,Mode=TwoWay}"
-                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
-                                    VerticalAlignment="Center" TickFrequency="0.1"/>
-                        </StackPanel>
-                    </GroupBox>
-                    <GroupBox
                         Header="图表缩放"
                         Margin="16">
                         <StackPanel>
@@ -48,10 +36,46 @@
                                     VerticalAlignment="Center" TickFrequency="5"/>
                         </StackPanel>
                     </GroupBox>
+                    <GroupBox
+                        Header="可选参数"
+                        Margin="16">
+                        <StackPanel>
+                            <TextBlock>发射波频率</TextBlock>
+                            <Slider Minimum="1.0"
+                                    Maximum="5.0"
+                                    Value="{Binding _transwaveFrequency,Mode=TwoWay}"
+                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                    VerticalAlignment="Center" TickFrequency="1"/>
+                            <TextBlock>载波频率</TextBlock>
+                            <Slider Minimum="4.0"
+                                    Maximum="10.0"
+                                    Value="{Binding _carrywaveFrequency,Mode=TwoWay}"
+                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                    VerticalAlignment="Center" TickFrequency="1"/>
+                            <TextBlock>外加直流分量</TextBlock>
+                            <Slider Minimum="0.0"
+                                    Maximum="2.0"
+                                    Value="{Binding _addedVoltage,Mode=TwoWay}"
+                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                    VerticalAlignment="Center" TickFrequency="0.1"/>
+                            <TextBlock>调制度</TextBlock>
+                            <Slider Minimum="0.0"
+                                    Maximum="10.0"
+                                    Value="{Binding _Ka,Mode=TwoWay}"
+                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                    VerticalAlignment="Center" TickFrequency="0.1"/>
+                            <TextBlock>检波周期</TextBlock>
+                            <Slider Minimum="20.0"
+                                    Maximum="200.0"
+                                    Value="{Binding _wavecheckPeriod,Mode=TwoWay}"
+                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                    VerticalAlignment="Center" TickFrequency="10"/>
+                        </StackPanel>
+                    </GroupBox>
                     <StackPanel Margin="10">
                         <Button Click="Click_MakeSource" Margin="5">生成源和载波</Button>
                         <Button Click="Click_MakeTransWave" Margin="5">调制发射波</Button>
-                        <Button Click="Click_ClearSource" Margin="5">清除源和载波</Button>
+                        <Button Click="Click_CheckWave" Margin="5">在终端检波</Button>
                         <Button Click="Click_ClearChart" Margin="5">清空图表</Button>
                     </StackPanel>
                 </StackPanel>

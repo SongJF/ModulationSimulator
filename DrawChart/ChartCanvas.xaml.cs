@@ -42,7 +42,8 @@ namespace DrawChart
         public void AddLineSeries(string tiltle, List<double> data)
         {
             //去重
-            if (_seriesCollection.FirstOrDefault(p => p.Title == tiltle) != null) return;
+            var result = _seriesCollection.FirstOrDefault(p => p.Title == tiltle);
+            if (result != null) _seriesCollection.Remove(result);
             _seriesCollection.Add(new LineSeries
             {
                 Title = tiltle,

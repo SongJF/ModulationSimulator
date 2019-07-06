@@ -12,29 +12,69 @@ namespace ModulationSimulator.Pages
     /// </summary>
     public partial class Exp_AM : UserControl
     {
-        //调制度
-        public double _Ka { get; set; }
+        
         public ChartCanvas _chartCanvas { get; set; }
 
+        #region 可选参数
+        /// <summary>
+        /// 调制度
+        /// </summary>
+        public double _Ka { get; set; }
+        /// <summary>
+        /// 检波周期
+        /// </summary>
+        public double _wavecheckPeriod { get; set; }
+        /// <summary>
+        /// 外加直流分量
+        /// </summary>
+        public double _addedVoltage { get; set; }
+        /// <summary>
+        /// 发射波频率
+        /// </summary>
+        public double _transwaveFrequency { get; set; }
+        /// <summary>
+        /// 载波频率
+        /// </summary>
+        public double _carrywaveFrequency { get; set; }
+        #endregion
+
+        #region waves
         private List<double> _sourceWave { get; set; }
-        private List<double> _carry_Wave { get; set; }
+        private List<double> _carryWave { get; set; }
+        private List<double> _sendedWave { get; set; }
+        private List <double> _checkedWave { get; set; }
+        #endregion
+
         public Exp_AM()
         {
             InitializeComponent();
 
             _chartCanvas = ChartCanvas;
-            _Ka = 1;
+
+            InitVaribles();
 
             DataContext = this;
+        }
+
+        private void InitVaribles()
+        {
+            _Ka = 1;
+            _addedVoltage = 1;
+            _wavecheckPeriod = 100;
+            _transwaveFrequency = 1;
+            _carrywaveFrequency = 6;
         }
 
 
         #region Events
         private void Click_MakeTransWave(object sender, RoutedEventArgs e)
         {
-            _chartCanvas.AddLineSeries("发射波", AmplitudeModulator.Modulate(0, _Ka, _sourceWave, _carry_Wave));
+            _sendedWave = AmplitudeModulator.Modulate(_addedVoltage, _Ka, _sourceWave, _carryWave);
+            _chartCanvas.AddLineSeries("发射波", _sendedWave);
+
+            _chartCanvas.RemoveLineSeries("载波");
+            _chartCanvas.RemoveLineSeries("信号");
         }
-        #endregion
 
         private void Click_ClearChart(object sender, RoutedEventArgs e)
         {
@@ -43,17 +83,19 @@ namespace ModulationSimulator.Pages
 
         private void Click_MakeSource(object sender, RoutedEventArgs e)
         {
-            _sourceWave = Electrical.Sin(1);
-            _carry_Wave = Electrical.Sin(6);
+            _sourceWave = Electrical.Sin(_transwaveFrequency);
+            _carryWave = Electrical.Sin(_carrywaveFrequency);
 
-            _chartCanvas.AddLineSeries("载波", _carry_Wave);
+            _chartCanvas.AddLineSeries("载波", _carryWave);
             _chartCanvas.AddLineSeries("信号", _sourceWave);
         }
 
-        private void Click_ClearSource(object sender, RoutedEventArgs e)
+        private void Click_CheckWave(object sender, RoutedEventArgs e)
         {
-            _chartCanvas.RemoveLineSeries("载波");
-            _chartCanvas.RemoveLineSeries("信号");
+            _checkedWave = AmplitudeModulator.DeModulate(_sendedWave, _wavecheckPeriod);
+            _chartCanvas.AddLineSeries("检测波", _checkedWave);
         }
+
+        #endregion
     }
 }
