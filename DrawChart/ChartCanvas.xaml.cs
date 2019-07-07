@@ -41,6 +41,8 @@ namespace DrawChart
         /// <param name="data">数据</param>
         public void AddLineSeries(string tiltle, List<double> data)
         {
+            //去空
+            if (tiltle == null || data == null) return;
             //去重
             var result = _seriesCollection.FirstOrDefault(p => p.Title == tiltle);
             if (result != null) _seriesCollection.Remove(result);

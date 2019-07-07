@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DataManager.Model;
+using MathNet.Numerics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,6 +43,57 @@ namespace DataManager.ToolBox.Modulator
         {
             //检空
             if (recieveWave == null) return null;
+
+            #region 拟合
+            //double primeSignal = 0;
+            //List<double> waveTop = new List<double>();
+            //List<double> waveBottom = new List<double>();
+
+
+            //Boolean risingEdge = false;
+            ////线性插值索引
+            //List<double> index = new List<double>();
+            //for (int i = 0; i < recieveWave.Count; i++)
+            //{
+            //    //上升沿
+            //    if (recieveWave[i] > primeSignal)
+            //    {
+            //        //更新前驱点
+            //        primeSignal = recieveWave[i];
+            //        //若之前还是上升沿
+            //        if (risingEdge) continue;
+            //        //之前下降沿现在上升沿 极小值点
+            //        waveBottom.Add(primeSignal);
+            //        risingEdge = true;
+            //    }
+            //    //下降沿
+            //    else
+            //    {
+            //        //更新前驱点
+            //        primeSignal = recieveWave[i];
+            //        //若之前还是下降沿
+            //        if (!risingEdge) continue;
+            //        //之前下降沿现在上升沿 极大值点
+            //        waveTop.Add(primeSignal);
+            //        index.Add(i);
+            //        risingEdge = false;
+            //    }
+
+            //}
+
+            //var linear = Interpolate.CubicSpline(index, waveTop);
+            //for (int i = 0; i < recieveWave.Count; i++)
+            //{
+            //    if (!index.Contains(i))
+            //    {
+            //        waveTop.Insert(i, linear.Interpolate(i));
+            //    }
+            //}
+
+            //return waveTop;
+
+            #endregion
+
             double primeSignal = 0;
             double presentSignal_ABS = 0;
             List<double> dataWave = new List<double>();
