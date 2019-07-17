@@ -1,5 +1,4 @@
-﻿using DataManager.Model;
-using MaterialDesignThemes.Wpf;
+﻿using MaterialDesignThemes.Wpf;
 using ModulationSimulator.Domain;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,8 +22,6 @@ namespace ModulationSimulator
 
             _MainSnakeBar = this.MainSnackbar;
 
-            InitGlobalVarible();
-
             //数据绑定
             DataContext = new MainWindowViewModel(InitSnakeBar());
 
@@ -46,12 +43,6 @@ namespace ModulationSimulator
             }, TaskScheduler.FromCurrentSynchronizationContext());
 
             return MainSnackbar.MessageQueue;
-        }
-
-        //TODO
-        void InitGlobalVarible()
-        {
-            GlobalVariable.SetValue();
         }
 
         #region Click事件

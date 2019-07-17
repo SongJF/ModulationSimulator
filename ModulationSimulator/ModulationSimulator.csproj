@@ -135,15 +135,5 @@
   <ItemGroup>
     <Resource Include="theme.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DataManager\DataManager.csproj">
-      <Project>{85d9e78b-3d0b-4233-95d2-9c1b7778a6d2}</Project>
-      <Name>DataManager</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DrawChart\DrawChart.csproj">
-      <Project>{b961aac6-702e-4ed4-b21d-6413992f2b0f}</Project>
-      <Name>DrawChart</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
