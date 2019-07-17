@@ -15,6 +15,7 @@ namespace ModulationSimulator.Domain
             MenuLists = new[]
             {
                 new MenuList(Properties.Resources.MenuName_Hello,new Hello()),
+                new MenuList(Properties.Resources.MenuName_Spectrum,new Exp_Spectrum()),
                 new MenuList(Properties.Resources.MenuName_AM,new Exp_AM()),
                 new MenuList(Properties.Resources.MenuName_Settings,new Settings())
             };

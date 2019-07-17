@@ -88,6 +88,15 @@ namespace ModulationSimulator.Properties {
         }
         
         /// <summary>
+        ///   查找类似 音频采集 的本地化字符串。
+        /// </summary>
+        public static string MenuName_Spectrum {
+            get {
+                return ResourceManager.GetString("MenuName_Spectrum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 欢迎 的本地化字符串。
         /// </summary>
         public static string SnakeMSG_Welcome {
