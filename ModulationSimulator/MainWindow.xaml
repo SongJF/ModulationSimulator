@@ -72,7 +72,6 @@
                                         <StackPanel Orientation="Horizontal">
                                             <Button Style="{StaticResource MaterialDesignFlatButton}"
                                                 Command="materialDesign:DialogHost.CloseDialogCommand"
-                                                Click="Click_CloseMainwin"
                                                 Margin="16 16 10 0" FontSize="15"
                                                 Content="是">
                                                 <Button.CommandParameter>

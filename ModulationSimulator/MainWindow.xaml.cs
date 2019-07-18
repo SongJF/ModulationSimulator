@@ -76,11 +76,5 @@ namespace ModulationSimulator
             this.DragMove();
         }
         #endregion
-
-        private void Click_CloseMainwin(object sender, RoutedEventArgs e)
-        {
-            var x = DataContext;
-
-        }
     }
 }
