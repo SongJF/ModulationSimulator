@@ -70,6 +70,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Chart_AM.xaml.cs">
+      <DependentUpon>Chart_AM.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\RealtimeFFTCalculator.cs" />
     <Compile Include="Utils\SpectrogramViewXYIntensity.cs" />
     <Compile Include="Utils\WaveformMonitor.cs" />
@@ -104,6 +107,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Chart_AM.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Chart_Spectrum.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

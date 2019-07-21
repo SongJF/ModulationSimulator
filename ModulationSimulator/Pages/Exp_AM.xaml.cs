@@ -36,32 +36,6 @@ namespace ModulationSimulator.Pages
         public Exp_AM()
         {
             InitializeComponent();
-
-            DataContext = this;
         }
-
-
-        #region Events
-        private void Click_MakeTransWave(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void Click_ClearChart(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void Click_MakeSource(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void Click_CheckWave(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void Click_MakeSpectrum(object sender, RoutedEventArgs e)
-        {
-            //FourierTransform.Transform(_signalWave);
-        }
-        #endregion
     }
 }

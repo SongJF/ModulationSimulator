@@ -178,7 +178,7 @@ namespace ChartCanvas
 
         #endregion
 
-
+        #region 依赖方法
         /// <summary>
         /// 初始化示波器
         /// </summary>
@@ -200,10 +200,7 @@ namespace ChartCanvas
             {
                 m_aWaveformMonitors = new WaveformMonitor[_channelCount];
 
-                // Let's disable SizeChanged event handler temporarily. 
-                // ArrangeMonitors method is called at the end of this 
-                // method.
-                gridChart.SizeChanged -= gridChart_SizeChanged;
+                
 
                 for (int i = 0; i < _channelCount; i++)
                 {
@@ -417,5 +414,7 @@ namespace ChartCanvas
                 //base.DisposedOf();
             }
         }
+
+        #endregion
     }
 }
