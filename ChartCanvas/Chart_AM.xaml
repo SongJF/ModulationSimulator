@@ -28,6 +28,14 @@
                         IsInputEnabled="False"/>
                 </stGui:AudioInput.Input>
             </stGui:AudioInput>
+            <StackPanel Orientation="Horizontal" Margin="1">
+                <TextBlock FontSize="12" Margin="1">图表缩放:</TextBlock>
+                <Button Height="20" FontSize="10" Margin="15 1 1 1">X+</Button>
+                <Button Height="20" FontSize="10" Margin="2 1 1 1">X-</Button>
+                <Button Height="20" FontSize="10" Margin="15 1 1 1">Y+</Button>
+                <Button Height="20" FontSize="10" Margin="2 1 1 1">Y-</Button>
+                <Button Height="20" FontSize="10" Margin="20 1 1 1">Auto</Button>
+            </StackPanel>
         </StackPanel>
         <Grid Grid.Row="1" Name="gridChart" SizeChanged="gridChart_SizeChanged" />
     </Grid>

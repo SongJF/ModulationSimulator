@@ -53,9 +53,9 @@ namespace ChartCanvas
         /// </summary>
         private int m_iFFTCalcIntervalMs;
         /// <summary>
-        /// 本次实验所用波数
+        /// 本次实验所有波序列名
         /// </summary>
-        private int _waveCount;
+        private string[] _seriesNames;
         #endregion
 
         /// <summary>
@@ -69,7 +69,13 @@ namespace ChartCanvas
             m_iFFTWindowLength = 1024 * 4;
             m_iHighFreq = 2000;
             _samplingFrequency = 0;
-            _waveCount = 4;
+            _seriesNames = new string[]
+            {
+                "音频",
+                "载波",
+                "调制",
+                "检波"
+            };
 
             InitializeComponent();
 
@@ -114,10 +120,15 @@ namespace ChartCanvas
             if (samples.Length == 0)
                 return;
 
-            int channelIndex = 0;
             if (m_aWaveformMonitors != null)
             {
-                m_aWaveformMonitors.FeedData(samples[0]);
+                double[][] waveData = new double[_seriesNames.Count()][];
+
+                var x = samples[0];
+                var y = new AmplitudeSineSweepComponent() { Frequency = 750, AmplitudeFrom = 4000, AmplitudeTo = 100, DurationMs = 2000 };
+
+                waveData[0] = samples[0];
+                m_aWaveformMonitors.FeedData(waveData);
             }
 
             //Feed multi-channel data to FFT calculator. If it gives a calculated result, set multi-channel result in the selected FFT chart
@@ -129,7 +140,7 @@ namespace ChartCanvas
                 if (m_fftCalculator.FeedDataAndCalculate(samples, out xValues, out yValues))
                 {
                     int rowCount = xValues.Length;
-
+                    int channelIndex = 0;
                     for (channelIndex = 0; channelIndex < 1; channelIndex++)
                     {
                         if (m_aSpectrograms2D != null)
@@ -169,7 +180,7 @@ namespace ChartCanvas
                 m_aWaveformMonitors =
                     new WaveformMonitor(
                             gridChart,
-                            0.25,
+                            _seriesNames,
                             DefaultColors.SeriesForBlackBackgroundWpf[0],
                             null);
                 m_aWaveformMonitors.Chart.ChartName = "示波器";
@@ -263,17 +274,19 @@ namespace ChartCanvas
                 return;
             }
             //整个grid的划分
-            int columnCount = 2;
-            int rowCount = 1;
+            //int columnCount = 2;
+            //int rowCount = 1;
 
-            //
-            int iTotalWidth = (int)gridChart.ActualWidth;
-            int iTotalHeight = (int)gridChart.ActualHeight;
+            ////
+            //int iTotalWidth = (int)gridChart.ActualWidth;
+            //int iTotalHeight = (int)gridChart.ActualHeight;
 
             //m_aWaveformMonitors.SetBounds(0, 0, iTotalWidth / 2, iTotalHeight);
             //m_aSpectrograms2D.SetBounds(0, iTotalWidth / 2, iTotalWidth, iTotalHeight);
-            m_aWaveformMonitors.SetBounds(0, 0, 510, 600);
-            m_aSpectrograms2D.SetBounds(400, 0, 510, 600);
+            int chartWidth = 480;
+            int chartHeight = 560;
+            m_aWaveformMonitors.SetBounds(0, 0, chartWidth, chartHeight);
+            m_aSpectrograms2D.SetBounds(chartWidth, 0, chartWidth, chartHeight);
         }
 
         /// <summary>

@@ -146,7 +146,11 @@ namespace ChartCanvas
             {
                 foreach (WaveformMonitor wm in m_aWaveformMonitors)
                 {
-                    wm.FeedData(samples[channelIndex]);
+                   
+                    wm.FeedData(new double[1][]
+                    {
+                        samples[channelIndex]
+                    });
                     channelIndex++;
                 }
             }
@@ -207,7 +211,7 @@ namespace ChartCanvas
                     WaveformMonitor wm =
                         new WaveformMonitor(
                             gridChart,
-                            0.25,
+                            new string[] { "输入"},
                             DefaultColors.SeriesForBlackBackgroundWpf[i % DefaultColors.SeriesForBlackBackgroundWpf.Length],
                             null
                         );

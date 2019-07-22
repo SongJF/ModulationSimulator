@@ -30,13 +30,13 @@ namespace ChartCanvas.Utils
         /// 构造函数
         /// </summary>
         /// <param name="parentControl">父容器</param>
-        /// <param name="xAxisMax">x轴最大值(无用参数)</param>
-        /// <param name="lineColor">绘制曲线颜色</param>
+        /// <param name="seriesNames">示波器各序列名</param>
+        /// <param name="titleColor">绘制曲线颜色</param>
         /// <param name="chartManager"> 内置图表的的chartManager(可空)</param>
         public WaveformMonitor(
             Panel parentControl,
-            Double xAxisMax,
-            Color lineColor,
+            string[] seriesNames,
+            Color titleColor,
             ChartManager chartManager
         )
         {
@@ -78,10 +78,10 @@ namespace ChartCanvas.Utils
             axisX.MouseScrolling = false;
             axisX.AxisThickness = 1;
 
-            AxisY axisY = _chart.ViewXY.YAxes[0];
-            axisY.SetRange(-30000, 30000);
-            axisY.Title.Visible = false;
-            axisY.LabelsFont = new WpfFont("Segoe UI", 11, true, false);
+            //AxisY axisY = _chart.ViewXY.YAxes[0];
+            //axisY.SetRange(-30000, 30000);
+            //axisY.Title.Visible = false;
+            //axisY.LabelsFont = new WpfFont("Segoe UI", 11, true, false);
 
             _chart.ViewXY.GraphBackground.GradientDirection = 270;
             _chart.ViewXY.GraphBackground.GradientFill = GradientFill.Cylindrical;
@@ -93,34 +93,46 @@ namespace ChartCanvas.Utils
 
             _chart.Title.Align = ChartTitleAlignment.TopCenter;
             _chart.Title.Offset.SetValues(0, 25);
-            _chart.Title.Color = lineColor;
+            _chart.Title.Color = titleColor;
 
             _chart.ViewXY.Margins = new Thickness(70, 10, 15, 10);
             _chart.ViewXY.ZoomPanOptions.ZoomRectLine.Color = Colors.Lime;
 
-            _chart.ChartBackground.Color = ChartTools.CalcGradient(lineColor, Colors.Black, 65);
+            _chart.ChartBackground.Color = ChartTools.CalcGradient(titleColor, Colors.Black, 65);
             _chart.ChartBackground.GradientDirection = 0;
             _chart.ChartBackground.GradientFill = GradientFill.Cylindrical;
 
-            //Add SampleDataSeries
-            SampleDataSeries sds = new SampleDataSeries(_chart.ViewXY, axisX, axisY);
-            sds.LineStyle.Width = 1f;
-            sds.LineStyle.Color = lineColor;
-            sds.LineStyle.AntiAliasing = LineAntialias.None;
-            sds.ScrollingStabilizing = true;
-            sds.MouseInteraction = false;
-            _chart.ViewXY.SampleDataSeries.Add(sds);
+            //添加多序列的y轴属性
+            for(int index = 0; index < seriesNames.Count(); index++)
+            {
+                AxisY axisY = new AxisY(_chart.ViewXY, false);
+                axisY.SetRange(-30000, 30000);
+                axisY.Title.Font = new WpfFont("Segoe UI", 10, false, false);
+                axisY.Title.Text = string.Format(seriesNames[index]);
+                //axisY.Title.Visible = false;
+                axisY.LabelsFont = new WpfFont("Segoe UI", 11, true, false);
+                _chart.ViewXY.YAxes.Add(axisY);
 
-            //Add the line as a zero level
-            ConstantLine cls = new ConstantLine(_chart.ViewXY, axisX, axisY);
-            cls.Title.Text = "Constant line";
-            cls.Title.Visible = false;
-            cls.LineStyle.Color = Colors.BlueViolet;
-            cls.Behind = true;
-            cls.LineStyle.Width = 2;
-            cls.MouseInteraction = false;
-            cls.Value = 0;
-            _chart.ViewXY.ConstantLines.Add(cls);
+                //Add SampleDataSeries
+                SampleDataSeries sds = new SampleDataSeries(_chart.ViewXY, axisX, axisY);
+                sds.LineStyle.Width = 1f;
+                sds.LineStyle.Color = DefaultColors.SeriesForBlackBackgroundWpf[index % DefaultColors.SeriesForBlackBackgroundWpf.Length];
+                sds.LineStyle.AntiAliasing = LineAntialias.None;
+                sds.ScrollingStabilizing = true;
+                sds.MouseInteraction = false;
+                _chart.ViewXY.SampleDataSeries.Add(sds);
+
+                //Add the line as a zero level
+                ConstantLine cls = new ConstantLine(_chart.ViewXY, axisX, axisY);
+                cls.Title.Text = "Constant line";
+                cls.Title.Visible = false;
+                cls.LineStyle.Color = Colors.BlueViolet;
+                cls.Behind = true;
+                cls.LineStyle.Width = 2;
+                cls.MouseInteraction = false;
+                cls.Value = 0;
+                _chart.ViewXY.ConstantLines.Add(cls);
+            }
 
             LineSeriesCursor cursor1 = new LineSeriesCursor(_chart.ViewXY, axisX);
             cursor1.ValueAtXAxis = 1;
@@ -265,17 +277,25 @@ namespace ChartCanvas.Utils
         /// 更新示波器数据
         /// </summary>
         /// <param name="samples">数据</param>
-        public void FeedData(double[] samples)
+        public void FeedData(double[][] samples)
         {
             //Only accept resolution count of data points 
             if (samples == null)
                 return;
 
             _chart.BeginUpdate();
-
-            SampleDataSeries series = _chart.ViewXY.SampleDataSeries[0];
-            series.AddSamples(samples, false);
-            _chart.ViewXY.XAxes[0].ScrollPosition = series.FirstSampleTimeStamp + (double)(series.PointCount - 1) / _samplingFrequency;
+            for(int index = 0; index < samples.Count(); index++)
+            {
+                SampleDataSeries series = _chart.ViewXY.SampleDataSeries[index];
+                series.AddSamples(samples[index], false);
+                if(samples[index] != null)
+                {
+                    _chart.ViewXY.XAxes[0].ScrollPosition = series.FirstSampleTimeStamp +
+                    (double)(series.PointCount - 1) / _samplingFrequency;
+                }
+                
+            }
+            
 
             _chart.EndUpdate();
         }

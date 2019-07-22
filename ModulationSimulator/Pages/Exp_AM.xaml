@@ -13,13 +13,13 @@
             <materialDesign:Card
                 DockPanel.Dock="Right" 
                 VerticalAlignment="Stretch"
-                MinWidth="250">
+                Width="200">
                 <Expander
                     Header="可选参数"
                     VerticalAlignment="Stretch"
                     IsExpanded="True">
                     <StackPanel>
-                        <Button Margin="5">应用</Button>
+                        <Button Margin="10">应用</Button>
                     </StackPanel>
                 </Expander>
             </materialDesign:Card>
