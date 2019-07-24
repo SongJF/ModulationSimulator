@@ -123,11 +123,24 @@ namespace ChartCanvas
             if (m_aWaveformMonitors != null)
             {
                 double[][] waveData = new double[_seriesNames.Count()][];
+                
+                var souceWave = samples[0];
+                //设置调制波幅度
+                double MaxAmplitude = 10000;
+                var carryWave = WaveGenerator.Sine(samples[0].Count() , (int)MaxAmplitude, _samplingFrequency, 5000);
+                double[] modulatedWava = new double[souceWave.Count()];
+                for(int i = 0; i < souceWave.Count(); i ++)
+                {
+                    double signal = souceWave[i] * carryWave[i] ;
+                    //每个信号除以调制波幅度以约束其值
+                    signal /= MaxAmplitude;
+                    modulatedWava[i] = signal;
+                }
 
-                var x = samples[0];
-                var y = new AmplitudeSineSweepComponent() { Frequency = 750, AmplitudeFrom = 4000, AmplitudeTo = 100, DurationMs = 2000 };
-
-                waveData[0] = samples[0];
+                waveData[0] = souceWave;
+                waveData[1] = carryWave;
+                waveData[2] = modulatedWava;
+                waveData[3] = samples[0];
                 m_aWaveformMonitors.FeedData(waveData);
             }
 
@@ -181,6 +194,7 @@ namespace ChartCanvas
                     new WaveformMonitor(
                             gridChart,
                             _seriesNames,
+                            _samplingFrequency,
                             DefaultColors.SeriesForBlackBackgroundWpf[0],
                             null);
                 m_aWaveformMonitors.Chart.ChartName = "示波器";

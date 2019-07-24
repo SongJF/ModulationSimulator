@@ -212,6 +212,7 @@ namespace ChartCanvas
                         new WaveformMonitor(
                             gridChart,
                             new string[] { "输入"},
+                            _samplingFrequency,
                             DefaultColors.SeriesForBlackBackgroundWpf[i % DefaultColors.SeriesForBlackBackgroundWpf.Length],
                             null
                         );

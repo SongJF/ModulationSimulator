@@ -31,16 +31,18 @@ namespace ChartCanvas.Utils
         /// </summary>
         /// <param name="parentControl">父容器</param>
         /// <param name="seriesNames">示波器各序列名</param>
+        /// <param name="sampleFrequency">绘制曲线颜色</param>
         /// <param name="titleColor">绘制曲线颜色</param>
         /// <param name="chartManager"> 内置图表的的chartManager(可空)</param>
         public WaveformMonitor(
             Panel parentControl,
             string[] seriesNames,
+            double sampleFrequency,
             Color titleColor,
             ChartManager chartManager
         )
         {
-            _samplingFrequency = 0.0;
+            _samplingFrequency = sampleFrequency;
             _parentControl = parentControl;
 
             _chart = new LightningChartUltimate();
@@ -50,6 +52,9 @@ namespace ChartCanvas.Utils
             _chart.VerticalAlignment = VerticalAlignment.Top;
             _chart.HorizontalAlignment = HorizontalAlignment.Left;
 
+            _chart.ViewXY.AxisLayout.YAxesLayout = YAxesLayout.Stacked;
+            _chart.ViewXY.AxisLayout.SegmentsGap = 10;
+
             parentControl.Children.Add(_chart);
 
             _chart.BeginUpdate();
@@ -58,6 +63,7 @@ namespace ChartCanvas.Utils
             _chart.ViewXY.AxisLayout.AutoAdjustMargins = false;
 
             _chart.ViewXY.DropOldSeriesData = true;
+            _chart.ChartRenderOptions.AntiAliasLevel = 0; // Disable hw anti-aliasing.
 
             AxisX axisX = _chart.ViewXY.XAxes[0];
             axisX.Maximum = 10;
@@ -102,25 +108,36 @@ namespace ChartCanvas.Utils
             _chart.ChartBackground.GradientDirection = 0;
             _chart.ChartBackground.GradientFill = GradientFill.Cylindrical;
 
+            //清除之前的y轴与数据序列
+            DisposeAllAndClear(_chart.ViewXY.YAxes);
+            DisposeAllAndClear(_chart.ViewXY.SampleDataSeries);
             //添加多序列的y轴属性
-            for(int index = 0; index < seriesNames.Count(); index++)
+            for (int index = 0; index < seriesNames.Count(); index++)
             {
-                AxisY axisY = new AxisY(_chart.ViewXY, false);
+                AxisY axisY = new AxisY(_chart.ViewXY);
                 axisY.SetRange(-30000, 30000);
                 axisY.Title.Font = new WpfFont("Segoe UI", 10, false, false);
                 axisY.Title.Text = string.Format(seriesNames[index]);
+                axisY.Title.Angle = 0;
+                axisY.Units.Visible = false;
                 //axisY.Title.Visible = false;
                 axisY.LabelsFont = new WpfFont("Segoe UI", 11, true, false);
                 _chart.ViewXY.YAxes.Add(axisY);
 
                 //Add SampleDataSeries
                 SampleDataSeries sds = new SampleDataSeries(_chart.ViewXY, axisX, axisY);
-                sds.LineStyle.Width = 1f;
+                _chart.ViewXY.SampleDataSeries.Add(sds);
+                sds.SampleFormat = SampleFormat.DoubleFloat;
                 sds.LineStyle.Color = DefaultColors.SeriesForBlackBackgroundWpf[index % DefaultColors.SeriesForBlackBackgroundWpf.Length];
+                sds.SamplingFrequency = _samplingFrequency;
+                sds.FirstSampleTimeStamp = 1.0 / _samplingFrequency;
+                sds.LineStyle.Width = 1f;
                 sds.LineStyle.AntiAliasing = LineAntialias.None;
+                sds.ScrollModePointsKeepLevel = 1;
                 sds.ScrollingStabilizing = true;
                 sds.MouseInteraction = false;
-                _chart.ViewXY.SampleDataSeries.Add(sds);
+
+
 
                 //Add the line as a zero level
                 ConstantLine cls = new ConstantLine(_chart.ViewXY, axisX, axisY);
@@ -134,20 +151,20 @@ namespace ChartCanvas.Utils
                 _chart.ViewXY.ConstantLines.Add(cls);
             }
 
-            LineSeriesCursor cursor1 = new LineSeriesCursor(_chart.ViewXY, axisX);
-            cursor1.ValueAtXAxis = 1;
-            cursor1.LineStyle.Width = 6;
+            //LineSeriesCursor cursor1 = new LineSeriesCursor(_chart.ViewXY, axisX);
+            //cursor1.ValueAtXAxis = 1;
+            //cursor1.LineStyle.Width = 6;
 
-            color = Colors.OrangeRed;
-            cursor1.LineStyle.Color = Color.FromArgb(180, color.R, color.G, color.B);
+            //color = Colors.OrangeRed;
+            //cursor1.LineStyle.Color = Color.FromArgb(180, color.R, color.G, color.B);
 
-            cursor1.FullHeight = true;
-            cursor1.SnapToPoints = true;
-            cursor1.Style = CursorStyle.PointTracking;
-            cursor1.TrackPoint.Color1 = Colors.Yellow;
-            cursor1.TrackPoint.Color2 = Colors.Transparent;
-            cursor1.TrackPoint.Shape = Shape.Circle;
-            _chart.ViewXY.LineSeriesCursors.Add(cursor1);
+            //cursor1.FullHeight = true;
+            //cursor1.SnapToPoints = true;
+            //cursor1.Style = CursorStyle.PointTracking;
+            //cursor1.TrackPoint.Color1 = Colors.Yellow;
+            //cursor1.TrackPoint.Color2 = Colors.Transparent;
+            //cursor1.TrackPoint.Shape = Shape.Circle;
+            //_chart.ViewXY.LineSeriesCursors.Add(cursor1);
 
             _chart.EndUpdate();
         }
@@ -181,7 +198,7 @@ namespace ChartCanvas.Utils
             _chart.ViewXY.SampleDataSeries[0].SamplingFrequency = samplingFrequency;
             _chart.ViewXY.SampleDataSeries[0].FirstSampleTimeStamp = 0;
 
-            _chart.ViewXY.ZoomPanOptions.MouseWheelZooming = MouseWheelZooming.Off;
+            _chart.ViewXY.ZoomPanOptions.MouseWheelZooming = MouseWheelZooming.Horizontal;
             _chart.ViewXY.ZoomPanOptions.LeftMouseButtonAction = MouseButtonAction.None;
 
             _chart.ViewXY.XAxes[0].ScrollMode = scrollMode;
@@ -190,7 +207,7 @@ namespace ChartCanvas.Utils
             _chart.ViewXY.XAxes[0].Title.Text = string.Format("{0} s", xAxisLen.ToString("0.000"));
             _chart.ViewXY.DropOldSeriesData = true;
 
-            _chart.ViewXY.LineSeriesCursors[0].Visible = false;
+            //_chart.ViewXY.LineSeriesCursors[0].Visible = false;
 
             _chart.EndUpdate();
         }
@@ -284,16 +301,24 @@ namespace ChartCanvas.Utils
                 return;
 
             _chart.BeginUpdate();
-            for(int index = 0; index < samples.Count(); index++)
+
+            for (int index = 0; index < samples.Count(); index++)
             {
-                SampleDataSeries series = _chart.ViewXY.SampleDataSeries[index];
-                series.AddSamples(samples[index], false);
-                if(samples[index] != null)
+                if (samples[index] != null)
                 {
-                    _chart.ViewXY.XAxes[0].ScrollPosition = series.FirstSampleTimeStamp +
-                    (double)(series.PointCount - 1) / _samplingFrequency;
+                    //SampleDataSeries series = _chart.ViewXY.SampleDataSeries[index];
+                    //series.AddSamples(samples[index], false);
+                    SampleDataSeries series = _chart.ViewXY.SampleDataSeries[index];
+                    var data = samples[index];
+                    series.AddSamples(data, true);
+                    //每次更新数据x轴只滚动一次
+                    if (index == 0)
+                    {
+                        _chart.ViewXY.XAxes[0].ScrollPosition = series.FirstSampleTimeStamp +
+                       (double)(series.PointCount - 1) / _samplingFrequency;
+                    }
                 }
-                
+
             }
             
 
@@ -312,6 +337,28 @@ namespace ChartCanvas.Utils
             _chart.Margin = new Thickness(x, y, 0, 0);
             _chart.Width = width;
             _chart.Height = height;
+        }
+
+        /// <summary>
+        /// 释放并清空传入的列表
+        /// </summary>
+        /// <typeparam name="T">列表类型</typeparam>
+        /// <param name="list">欲清空的列表</param>
+        private static void DisposeAllAndClear<T>(System.Windows.FreezableCollection<T> list) where T : System.Windows.Freezable
+        {
+            if (list == null)
+                return;
+
+            while (list.Count > 0)
+            {
+                int lastInd = list.Count - 1;
+                T item = list[lastInd]; // take item ref from list. 
+                list.RemoveAt(lastInd); // remove item first
+                if (item != null)
+                    (item as IDisposable).Dispose();     // then dispose it. 
+            }
+
+
         }
     }
 }

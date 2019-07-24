@@ -76,6 +76,7 @@
     <Compile Include="Utils\RealtimeFFTCalculator.cs" />
     <Compile Include="Utils\SpectrogramViewXYIntensity.cs" />
     <Compile Include="Utils\WaveformMonitor.cs" />
+    <Compile Include="Utils\WaveGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Chart_Spectrum.xaml.cs">
