@@ -2,19 +2,9 @@
 using Arction.Wpf.SignalProcessing;
 using ChartCanvas.Utils;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ChartCanvas
 {
@@ -398,7 +388,53 @@ namespace ChartCanvas
                 //base.DisposedOf();
             }
         }
+
+        /// <summary>
+        /// 保存为图片
+        /// </summary>
+        /// <param name="Chart"></param>
+        public void SaveImage(ImageSaveMode mode)
+        {
+            LightningChartUltimate Chart;
+
+            switch(mode)
+            {
+                case ImageSaveMode.Wave:
+                    Chart = m_aWaveformMonitors.Chart;
+                    break;
+                case ImageSaveMode.SignalSpectrograms:
+                    Chart = m_aSpectrograms2D_signal.Chart;
+                    break;
+                case ImageSaveMode.SourceSpectrograms:
+                    Chart = m_aSpectrograms2D_source.Chart;
+                    break;
+                default:
+                    return;
+            }
+
+            if(Chart != null)
+            {
+                var saveDialog = new Microsoft.Win32.SaveFileDialog();
+                saveDialog.Filter = "图片文件 (*.png;*.bmp;*.jpg;)|*.png;*.bmp;*.jpg;|All files (*.*)|*.*";
+                saveDialog.FileName = Chart.ChartName;
+                if ( saveDialog.ShowDialog() == true)
+                {
+                    if(Chart.SaveToFile(saveDialog.FileName) == false)
+                    {
+                        throw new Exception("图片保存失败");
+                    }
+                }
+
+            }
+        }
         #endregion
+    }
+
+    public enum ImageSaveMode
+    {
+        Wave = 0,
+        SourceSpectrograms = 1,
+        SignalSpectrograms = 2
     }
 
     public class Param_AM

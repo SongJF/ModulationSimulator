@@ -15,7 +15,7 @@ namespace ModulationSimulator
     public partial class MainWindow : Window
     {
         //设置主悬浮条
-        public Snackbar _MainSnakeBar;
+        public static Snackbar _MainSnakeBar;
         public MainWindow()
         {
             InitializeComponent();

@@ -13,28 +13,7 @@ namespace ModulationSimulator.Pages
     public partial class Exp_AM : UserControl
     {
 
-        #region 可选参数
-        /// <summary>
-        /// 调制度
-        /// </summary>
-        public double _Ka { get; set; }
-        /// <summary>
-        /// 检波周期
-        /// </summary>
-        public double _wavecheckPeriod { get; set; }
-        /// <summary>
-        /// 外加直流分量
-        /// </summary>
-        public double _addedVoltage { get; set; }
-        /// <summary>
-        /// 信号波频率
-        /// </summary>
-        public double _signalwaveFrequency { get; set; }
-        /// <summary>
-        /// 载波频率
-        /// </summary>
-        public double _carrywaveFrequency { get; set; }
-
+        #region 对象声明
         public  Chart_AM _Exp { get; set; }
 
         private MusicPlayer _MusicPlayer;
@@ -57,6 +36,13 @@ namespace ModulationSimulator.Pages
             };
         }
 
+        private void Dispose()
+        {
+            _MusicPlayer.Dispose();
+            _MusicPlayer = null;
+        }
+
+        #region 控件事件
         private void Click_96Hz(object sender, RoutedEventArgs e)
         {
             _MusicPlayer.Play(@"StaticResource/96hz_full.mp3");
@@ -77,10 +63,43 @@ namespace ModulationSimulator.Pages
             _MusicPlayer.Play(@"StaticResource/Piano.mp3");
         }
 
-        private void Dispose()
+        
+
+        private void Click_SaveWave(object sender, RoutedEventArgs e)
         {
-            _MusicPlayer.Dispose();
-            _MusicPlayer = null;
+            try
+            {
+                _Exp.SaveImage(ImageSaveMode.Wave);
+            }
+            catch(Exception ex)
+            {
+                MainWindow._MainSnakeBar.MessageQueue.Enqueue("发生错误: " + ex.Message);
+            }
         }
+
+        private void Click_SaveSourceSpectrograms(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _Exp.SaveImage(ImageSaveMode.SourceSpectrograms);
+            }
+            catch (Exception ex)
+            {
+                MainWindow._MainSnakeBar.MessageQueue.Enqueue("发生错误: " + ex.Message);
+            }
+        }
+
+        private void Click_SaveSignalSpectrograms(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _Exp.SaveImage(ImageSaveMode.SignalSpectrograms);
+            }
+            catch (Exception ex)
+            {
+                MainWindow._MainSnakeBar.MessageQueue.Enqueue("发生错误: " + ex.Message);
+            }
+        }
+        #endregion
     }
 }
