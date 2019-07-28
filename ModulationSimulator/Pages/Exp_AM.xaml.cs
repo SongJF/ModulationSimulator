@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ChartCanvas;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -31,11 +32,17 @@ namespace ModulationSimulator.Pages
         /// 载波频率
         /// </summary>
         public double _carrywaveFrequency { get; set; }
+
+        public  Chart_AM _Exp { get; set; }
         #endregion
 
         public Exp_AM()
         {
             InitializeComponent();
+
+            _Exp = Exp;
+
+            DataContext = this;
         }
     }
 }

@@ -64,6 +64,8 @@ namespace ChartCanvas
         /// 本次实验所有波序列名
         /// </summary>
         private string[] _seriesNames;
+
+        public Param_AM Param { get; set; }
         #endregion
 
         /// <summary>
@@ -78,6 +80,7 @@ namespace ChartCanvas
             m_iFFTWindowLength = 1024 * 4;
             m_iHighFreq = 2000;
             _samplingFrequency = 0;
+            Param = new Param_AM(1000);
             _seriesNames = new string[]
             {
                 "音频",
@@ -135,7 +138,7 @@ namespace ChartCanvas
             //生成载波
             double MaxAmplitude = 10000;
             double[] carryWave = WaveGenerator.Sine(samples[0].Count(), 
-                (int)MaxAmplitude, _samplingFrequency, 1000);
+                (int)MaxAmplitude, _samplingFrequency, Param.moudulateFrequency);
 
             //生成调制波
             double[] modulatedWava = new double[souceWave.Count()];
@@ -396,5 +399,15 @@ namespace ChartCanvas
             }
         }
         #endregion
+    }
+
+    public class Param_AM
+    {
+        public Param_AM(double _moudulateFrequency)
+        {
+            moudulateFrequency = _moudulateFrequency;
+        }
+
+        public double moudulateFrequency { get; set; }
     }
 }
