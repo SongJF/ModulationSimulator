@@ -2,6 +2,7 @@
 using ModulationSimulator.Components;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -63,13 +64,12 @@ namespace ModulationSimulator.Pages
             _MusicPlayer.Play(@"StaticResource/Piano.mp3");
         }
 
-        
 
         private void Click_SaveWave(object sender, RoutedEventArgs e)
         {
             try
             {
-                _Exp.SaveImage(ImageSaveMode.Wave);
+                _Exp.ChartToImage(ImageSaveMode.Wave);
             }
             catch(Exception ex)
             {
@@ -81,7 +81,7 @@ namespace ModulationSimulator.Pages
         {
             try
             {
-                _Exp.SaveImage(ImageSaveMode.SourceSpectrograms);
+                _Exp.ChartToImage(ImageSaveMode.SourceSpectrograms);
             }
             catch (Exception ex)
             {
@@ -93,7 +93,7 @@ namespace ModulationSimulator.Pages
         {
             try
             {
-                _Exp.SaveImage(ImageSaveMode.SignalSpectrograms);
+                _Exp.ChartToImage(ImageSaveMode.SignalSpectrograms);
             }
             catch (Exception ex)
             {
@@ -101,5 +101,18 @@ namespace ModulationSimulator.Pages
             }
         }
         #endregion
+
+        private async void Click_SaveWaveData(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await _Exp.ChartToExcel();
+                MainWindow._MainSnakeBar.MessageQueue.Enqueue("保存成功！");
+            }
+            catch (Exception ex)
+            {
+                MainWindow._MainSnakeBar.MessageQueue.Enqueue("发生错误: " + ex.Message);
+            }
+        }
     }
 }

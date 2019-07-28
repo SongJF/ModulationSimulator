@@ -3,6 +3,8 @@ using Arction.Wpf.SignalProcessing;
 using ChartCanvas.Utils;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -393,7 +395,7 @@ namespace ChartCanvas
         /// 保存为图片
         /// </summary>
         /// <param name="Chart"></param>
-        public void SaveImage(ImageSaveMode mode)
+        public void ChartToImage(ImageSaveMode mode)
         {
             LightningChartUltimate Chart;
 
@@ -425,6 +427,42 @@ namespace ChartCanvas
                     }
                 }
 
+            }
+        }
+        /// <summary>
+        /// 保存为EXCEL表格
+        /// </summary>
+        public async Task ChartToExcel()
+        {
+            var saveDialog = new Microsoft.Win32.SaveFileDialog();
+            saveDialog.Filter = "Excel工作表 (*.xlsx;)|*.xlsx";
+            saveDialog.FileName = "波形数据";
+            if (saveDialog.ShowDialog() == true)
+            {
+                string[] colNames = new string[] { "信号源", "载波", "调制波", "解调波" };
+                double[][] data = new double[m_aWaveformMonitors.Chart.ViewXY.SampleDataSeries.Count][];
+                for (int i = 0; i < data.Count(); i++)
+                {
+                    data[i] = m_aWaveformMonitors.Chart.ViewXY.SampleDataSeries[i].SamplesDouble;
+                }
+
+                //在大量耗时的工作中使用异步避免卡住线程使LightningChart产生异常
+                await Task.Run(() =>
+                {
+                    //去样例末尾的大量0
+                    for (int i = 0; i < data.Count(); i++)
+                    {
+                        double[] sample = data[i];
+                        int count;
+                        for (count = sample.Count() - 1; count > 0; count--)
+                        {
+                            if (sample[count] != 0) break;
+                        }
+                        data[i] = sample.Take(count).ToArray();
+                    }
+
+                    ExcelWriter.Save(saveDialog.FileName, colNames, data);
+                });
             }
         }
         #endregion

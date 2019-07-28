@@ -23,7 +23,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}">调制频率</TextBlock>
                                     <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" Margin="5 0 0 0 "
-                                               VerticalAlignment="Center"
+                                               VerticalAlignment="Center"  Foreground="{DynamicResource AccentColorBrush}"
                                                Text="{Binding _Exp.Param.moudulateFrequency, Mode=OneWay}"/>
                                 </StackPanel>
                                 <Slider Minimum="800" Maximum="1800" TickFrequency="100" 
@@ -46,7 +46,7 @@
                             <Button Click="Click_SaveWave">波形图</Button>
                             <Button Click="Click_SaveSourceSpectrograms" Margin="0 5 0 0">信号源频谱图</Button>
                             <Button Click="Click_SaveSignalSpectrograms" Margin="0 5 0 0">调制波频谱图</Button>
-                            <Button Click="Click_Pause" Margin=" 0 5 0 0">波形数据</Button>
+                            <Button Click="Click_SaveWaveData" Margin=" 0 5 0 0">波形数据</Button>
                         </StackPanel>
                     </Expander>
                 </StackPanel>
