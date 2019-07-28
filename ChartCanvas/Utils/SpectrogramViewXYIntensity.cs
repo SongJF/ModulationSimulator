@@ -79,6 +79,7 @@ namespace ChartCanvas.Utils
             chart.Title.Offset.SetValues(0, 20);
             chart.ViewXY.ZoomPanOptions.RightMouseButtonAction = MouseButtonAction.None;
             chart.ViewXY.ZoomPanOptions.LeftMouseButtonAction = MouseButtonAction.None;
+            chart.ViewXY.ZoomPanOptions.MouseWheelZooming = MouseWheelZooming.Off;
 
             //Disable automatic axis layouts 
             chart.ViewXY.AxisLayout.AutoAdjustMargins = false;

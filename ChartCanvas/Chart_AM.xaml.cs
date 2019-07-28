@@ -29,13 +29,21 @@ namespace ChartCanvas
         /// </summary>
         private WaveformMonitor m_aWaveformMonitors;
         /// <summary>
-        /// 频谱仪
+        /// 频谱仪(源)
         /// </summary>
-        private SpectrogramViewXYIntensity m_aSpectrograms2D;
+        private SpectrogramViewXYIntensity m_aSpectrograms2D_source;
         /// <summary>
-        /// FFT计算辅助类
+        /// 频谱仪(信号)
         /// </summary>
-        private RealtimeFFTCalculator m_fftCalculator;
+        private SpectrogramViewXYIntensity m_aSpectrograms2D_signal;
+        /// <summary>
+        /// FFT计算辅助类(源)
+        /// </summary>
+        private RealtimeFFTCalculator m_fftCalculator_source;
+        /// <summary>
+        /// FFT计算辅助类(信号)
+        /// </summary>
+        private RealtimeFFTCalculator m_fftCalculator_signal;
         /// <summary>
         /// 采样频率
         /// </summary>
@@ -45,7 +53,7 @@ namespace ChartCanvas
         /// </summary>
         private int m_iFFTWindowLength;
         /// <summary>
-        /// 
+        /// 频谱仪显示最大频率
         /// </summary>
         private int m_iHighFreq;
         /// <summary>
@@ -63,7 +71,8 @@ namespace ChartCanvas
         /// </summary>
         public Chart_AM()
         {
-            m_aSpectrograms2D = null;
+            m_aSpectrograms2D_source = null;
+            m_aSpectrograms2D_signal = null;
             m_aWaveformMonitors = null;
             m_iFFTCalcIntervalMs = 20;
             m_iFFTWindowLength = 1024 * 4;
@@ -110,7 +119,7 @@ namespace ChartCanvas
         }
 
         /// <summary>
-        /// 音频
+        /// 音频数据更新
         /// </summary>
         /// <param name="args"></param>
         private void AudioInput_DataGenerated(DataGeneratedEventArgs args)
@@ -120,23 +129,28 @@ namespace ChartCanvas
             if (samples.Length == 0)
                 return;
 
+            //源波
+            double[] souceWave = samples[0];
+
+            //生成载波
+            double MaxAmplitude = 10000;
+            double[] carryWave = WaveGenerator.Sine(samples[0].Count(), 
+                (int)MaxAmplitude, _samplingFrequency, 1000);
+
+            //生成调制波
+            double[] modulatedWava = new double[souceWave.Count()];
+            for (int i = 0; i < souceWave.Count(); i++)
+            {
+                double signal = souceWave[i] * carryWave[i];
+                //每个信号除以载波幅度以约束其值范围
+                signal /= MaxAmplitude;
+                modulatedWava[i] = signal;
+            }
+
+            //为示波器输入数据
             if (m_aWaveformMonitors != null)
             {
                 double[][] waveData = new double[_seriesNames.Count()][];
-                
-                var souceWave = samples[0];
-                //设置调制波幅度
-                double MaxAmplitude = 10000;
-                var carryWave = WaveGenerator.Sine(samples[0].Count() , (int)MaxAmplitude, _samplingFrequency, 5000);
-                double[] modulatedWava = new double[souceWave.Count()];
-                for(int i = 0; i < souceWave.Count(); i ++)
-                {
-                    double signal = souceWave[i] * carryWave[i] ;
-                    //每个信号除以调制波幅度以约束其值
-                    signal /= MaxAmplitude;
-                    modulatedWava[i] = signal;
-                }
-
                 waveData[0] = souceWave;
                 waveData[1] = carryWave;
                 waveData[2] = modulatedWava;
@@ -145,23 +159,29 @@ namespace ChartCanvas
             }
 
             //Feed multi-channel data to FFT calculator. If it gives a calculated result, set multi-channel result in the selected FFT chart
-            if (m_fftCalculator != null)
+            if (m_fftCalculator_source != null)
             {
                 double[][][] yValues;
                 double[][][] xValues;
 
-                if (m_fftCalculator.FeedDataAndCalculate(samples, out xValues, out yValues))
+                if (m_fftCalculator_source.FeedDataAndCalculate(samples, out xValues, out yValues))
                 {
                     int rowCount = xValues.Length;
-                    int channelIndex = 0;
-                    for (channelIndex = 0; channelIndex < 1; channelIndex++)
-                    {
-                        if (m_aSpectrograms2D != null)
-                        {
-                            m_aSpectrograms2D.SetData(yValues, channelIndex, rowCount);
-                        }
-                    }
+                     m_aSpectrograms2D_source.SetData(yValues, 0, rowCount);
+                }
+            }
 
+            if(m_fftCalculator_signal != null)
+            {
+                double[][][] yValues;
+                double[][][] xValues;
+
+                if (m_fftCalculator_signal.FeedDataAndCalculate(
+                   new double[1][] { modulatedWava },
+                   out xValues, out yValues))
+                {
+                    int rowCount = xValues.Length;
+                    m_aSpectrograms2D_signal.SetData(yValues, 0, rowCount);
                 }
             }
 
@@ -240,7 +260,7 @@ namespace ChartCanvas
             }
 
             string strTitle = "P(f)";
-            m_aSpectrograms2D = new SpectrogramViewXYIntensity(
+            m_aSpectrograms2D_source = new SpectrogramViewXYIntensity(
                 gridChart,
                 true,
                 resolution,
@@ -250,7 +270,19 @@ namespace ChartCanvas
                 m_iHighFreq,
                 strTitle,
                 DefaultColors.SeriesForBlackBackgroundWpf[0]);
-            m_aSpectrograms2D.Chart.ChartName = "频谱仪";
+            m_aSpectrograms2D_source.Chart.ChartName = "频谱仪(源)";
+
+            m_aSpectrograms2D_signal = new SpectrogramViewXYIntensity(
+                gridChart,
+                true,
+                resolution,
+                m_iFFTCalcIntervalMs,
+                5,
+                m_iHighFreq,
+                2000,
+                strTitle,
+                DefaultColors.SeriesForBlackBackgroundWpf[0]);
+            m_aSpectrograms2D_signal.Chart.ChartName = "频谱仪(信号)";
 
             ArrangeMonitors();
         }
@@ -260,10 +292,15 @@ namespace ChartCanvas
         /// </summary>
         private void DisposeSpectrograms()
         {
-            if (m_aSpectrograms2D != null)
+            if (m_aSpectrograms2D_source != null)
             {
-                m_aSpectrograms2D.Dispose();
-                m_aSpectrograms2D = null;
+                m_aSpectrograms2D_source.Dispose();
+                m_aSpectrograms2D_source = null;
+            }
+            if (m_aSpectrograms2D_signal != null)
+            {
+                m_aSpectrograms2D_signal.Dispose();
+                m_aSpectrograms2D_signal = null;
             }
         }
 
@@ -272,9 +309,13 @@ namespace ChartCanvas
         /// </summary>
         private void InitFFTCalculator()
         {
-            if (m_fftCalculator != null)
-                m_fftCalculator.Dispose();
-            m_fftCalculator = new RealtimeFFTCalculator(m_iFFTCalcIntervalMs,
+            if (m_fftCalculator_source != null)
+                m_fftCalculator_source.Dispose();
+            if (m_fftCalculator_signal != null)
+                m_fftCalculator_signal.Dispose();
+            m_fftCalculator_source = new RealtimeFFTCalculator(m_iFFTCalcIntervalMs,
+                _samplingFrequency, m_iFFTWindowLength, 1);
+            m_fftCalculator_signal = new RealtimeFFTCalculator(m_iFFTCalcIntervalMs,
                 _samplingFrequency, m_iFFTWindowLength, 1);
         }
 
@@ -283,24 +324,19 @@ namespace ChartCanvas
         /// </summary>
         private void ArrangeMonitors()
         {
-            if(m_aSpectrograms2D==null||m_aWaveformMonitors==null)
+            //去空
+            if(m_aSpectrograms2D_source==null || 
+                m_aSpectrograms2D_signal == null ||
+                m_aWaveformMonitors==null)
             {
                 return;
             }
-            //整个grid的划分
-            //int columnCount = 2;
-            //int rowCount = 1;
 
-            ////
-            //int iTotalWidth = (int)gridChart.ActualWidth;
-            //int iTotalHeight = (int)gridChart.ActualHeight;
-
-            //m_aWaveformMonitors.SetBounds(0, 0, iTotalWidth / 2, iTotalHeight);
-            //m_aSpectrograms2D.SetBounds(0, iTotalWidth / 2, iTotalWidth, iTotalHeight);
-            int chartWidth = 480;
-            int chartHeight = 560;
+            int chartWidth = 460;
+            int chartHeight = 540;
             m_aWaveformMonitors.SetBounds(0, 0, chartWidth, chartHeight);
-            m_aSpectrograms2D.SetBounds(chartWidth, 0, chartWidth, chartHeight);
+            m_aSpectrograms2D_source.SetBounds(chartWidth + 5, 0, chartWidth, chartHeight/2);
+            m_aSpectrograms2D_signal.SetBounds(chartWidth + 5, chartHeight / 2, chartWidth, chartHeight / 2);
         }
 
         /// <summary>
@@ -331,16 +367,27 @@ namespace ChartCanvas
                     m_aWaveformMonitors = null;
                 }
 
-                if (m_aSpectrograms2D != null)
+                if (m_aSpectrograms2D_source != null)
                 {
-                    m_aSpectrograms2D.Dispose();
-                    m_aSpectrograms2D = null;
+                    m_aSpectrograms2D_source.Dispose();
+                    m_aSpectrograms2D_source = null;
+                }
+                if (m_aSpectrograms2D_signal != null)
+                {
+                    m_aSpectrograms2D_signal.Dispose();
+                    m_aSpectrograms2D_signal = null;
                 }
 
-                if (m_fftCalculator != null)
+                if (m_fftCalculator_source != null)
                 {
-                    m_fftCalculator.Dispose();
-                    m_fftCalculator = null;
+                    m_fftCalculator_source.Dispose();
+                    m_fftCalculator_source = null;
+                }
+
+                if (m_fftCalculator_signal != null)
+                {
+                    m_fftCalculator_signal.Dispose();
+                    m_fftCalculator_signal = null;
                 }
 
                 // Disposing of unmanaged resources done.

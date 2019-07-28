@@ -96,7 +96,7 @@ namespace ChartCanvas.Utils
             yValues = null;
             if (data == null)
                 return false;
-
+            
             int channelCounter = m_iChannelCount;
             if (data.Length < channelCounter)
                 channelCounter = data.Length;
@@ -128,8 +128,10 @@ namespace ChartCanvas.Utils
                 valuesY[i] = new double[channelCounter][];
                 int samplesInCombinedData = 0;
 
+                //多频道并行计算
                 System.Threading.Tasks.Parallel.For(0, channelCounter, iChannel =>
                 {
+                    //拼接前次处理过的数据与新数据形成要处理的数据
                     double[] combinedData = new double[_oldData[iChannel].Length + samplesCopiesAmount];
                     Array.Copy(_oldData[iChannel], 0, combinedData, 0, _oldData[iChannel].Length);
                     Array.Copy(data[iChannel], i * samplesPerUpdate, combinedData, _oldData[iChannel].Length, samplesCopiesAmount);
@@ -146,6 +148,7 @@ namespace ChartCanvas.Utils
                         for (int j = samplesInCombinedData - m_iFFTWindowLen; j < samplesInCombinedData; j++)
                             dataCombined[index++] = combinedData[j];
 
+                        //调用内建方法计算频谱
                         double[] fftResult;
                         if (_spectrumCalculator.PowerSpectrum(dataCombined, out fftResult))
                         {
