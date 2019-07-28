@@ -281,8 +281,8 @@ namespace ChartCanvas
                 resolution,
                 m_iFFTCalcIntervalMs,
                 5,
+                0,
                 m_iHighFreq,
-                2000,
                 strTitle,
                 DefaultColors.SeriesForBlackBackgroundWpf[0]);
             m_aSpectrograms2D_signal.Chart.ChartName = "频谱仪(信号)";
