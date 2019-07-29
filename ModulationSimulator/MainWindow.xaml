@@ -34,7 +34,7 @@
                              PreviewMouseLeftButtonUp="MenuListBox_PreviewMouseLeftButtonUp">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" Margin="15 15 25 15" />
+                                    <TextBlock Text="{Binding Name}" Margin="15 5" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>

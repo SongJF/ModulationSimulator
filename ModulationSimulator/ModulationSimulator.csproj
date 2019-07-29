@@ -91,10 +91,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Pages\Exp_AM.xaml.cs">
@@ -105,9 +101,6 @@
     </Compile>
     <Compile Include="Pages\Hello.xaml.cs">
       <DependentUpon>Hello.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

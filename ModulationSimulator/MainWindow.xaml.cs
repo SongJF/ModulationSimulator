@@ -15,7 +15,7 @@ namespace ModulationSimulator
     public partial class MainWindow : Window
     {
         //设置主悬浮条
-        public static Snackbar _MainSnakeBar;
+        private static Snackbar _MainSnakeBar;
         public MainWindow()
         {
             InitializeComponent();
@@ -66,6 +66,13 @@ namespace ModulationSimulator
             }
 
             MenuToggleButton.IsChecked = false;
+        }
+
+        public static void SnakeMessage(string msg)
+        {
+            if (msg == null)
+                return;
+            _MainSnakeBar.MessageQueue.Enqueue(msg);
         }
 
         /// <summary>

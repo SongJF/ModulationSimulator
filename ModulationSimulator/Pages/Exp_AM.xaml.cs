@@ -73,7 +73,8 @@ namespace ModulationSimulator.Pages
             }
             catch(Exception ex)
             {
-                MainWindow._MainSnakeBar.MessageQueue.Enqueue("发生错误: " + ex.Message);
+                MainWindow.SnakeMessage("发生错误: " + ex.Message);
+                MainWindow.SnakeMessage("保存成功！");
             }
         }
 
@@ -85,7 +86,8 @@ namespace ModulationSimulator.Pages
             }
             catch (Exception ex)
             {
-                MainWindow._MainSnakeBar.MessageQueue.Enqueue("发生错误: " + ex.Message);
+                MainWindow.SnakeMessage("发生错误: " + ex.Message);
+                MainWindow.SnakeMessage("保存成功！");
             }
         }
 
@@ -94,10 +96,12 @@ namespace ModulationSimulator.Pages
             try
             {
                 _Exp.ChartToImage(ImageSaveMode.SignalSpectrograms);
+                MainWindow.SnakeMessage("保存成功！");
+
             }
             catch (Exception ex)
             {
-                MainWindow._MainSnakeBar.MessageQueue.Enqueue("发生错误: " + ex.Message);
+                MainWindow.SnakeMessage("发生错误: " + ex.Message);
             }
         }
         #endregion
@@ -107,11 +111,11 @@ namespace ModulationSimulator.Pages
             try
             {
                 await _Exp.ChartToExcel();
-                MainWindow._MainSnakeBar.MessageQueue.Enqueue("保存成功！");
+                MainWindow.SnakeMessage("保存成功！");
             }
             catch (Exception ex)
             {
-                MainWindow._MainSnakeBar.MessageQueue.Enqueue("发生错误: " + ex.Message);
+                MainWindow.SnakeMessage("发生错误: " + ex.Message);
             }
         }
     }

@@ -7,36 +7,62 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="625" d:DesignWidth="1200">
-    <Grid>
-        <StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0 80 0 70" HorizontalAlignment="Center">
-                <Image Source="/StaticResource/theme.ico" Margin="10" Width="100"/>
-                <StackPanel VerticalAlignment="Center">
-                    <TextBlock Style="{StaticResource MaterialDesignDisplay2TextBlock}" HorizontalAlignment="Center">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0 80 0 20" HorizontalAlignment="Center">
+            <Image Source="/StaticResource/theme.ico" Margin="10" Width="100"/>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource MaterialDesignDisplay2TextBlock}" HorizontalAlignment="Center">
                         欢迎使用模拟调制可视化程序
-                    </TextBlock>
-                    <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="10" Click="GotoGithub">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="GithubCircle" />
-                            <TextBlock Margin="8 0 0 0">在Github上浏览源码</TextBlock>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+                </TextBlock>
+                <Button Style="{StaticResource MaterialDesignFlatButton}" Margin="10" Click="GotoGithub">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="GithubCircle" />
+                        <TextBlock Margin="8 0 0 0">在Github上浏览源码</TextBlock>
+                    </StackPanel>
+                </Button>
             </StackPanel>
+        </StackPanel>
 
+        <DockPanel Width="750" Margin="0 50">
             <materialDesign:Card
-                HorizontalAlignment="Center"
-                Width="750"  Padding="20">
+                DockPanel.Dock="Right" Padding="12">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <Button Style="{StaticResource MaterialDesignFloatingActionButton}" 
+                            Background="#795548" Tag="{x:Static local:ThemeColor.brown}" Margin="5"
+                            Click="Click_ChangeTheme" Grid.Column="1" BorderBrush="{x:Null}" Height="40" Width="40"/>
+                        <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                Background="#9E9E9E" Tag="{x:Static local:ThemeColor.grey}" Margin="5"
+                                Click="Click_ChangeTheme" Grid.Column="2" BorderBrush="{x:Null}" Height="40" Width="40"/>
+                        <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                Background="#2196F3" Tag="{x:Static local:ThemeColor.blue}" Margin="5"
+                                Click="Click_ChangeTheme" Grid.Column="3" BorderBrush="{x:Null}" Height="40" Width="40"/>
+                        <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                Background="#3F51B5" Tag="{x:Static local:ThemeColor.indigo}" Margin="5"
+                                Click="Click_ChangeTheme" Grid.Column="4" BorderBrush="{x:Null}" Height="40" Width="40"/>
+                        <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                Background="#673AB7" Tag="{x:Static local:ThemeColor.deeppurple}" Margin="5"
+                                Click="Click_ChangeTheme" Grid.Column="5" BorderBrush="{x:Null}" Height="40" Width="40"/>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="ChevronDoubleLeft" />
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                   TextWrapping="Wrap" Width="20">点击以改变主题色</TextBlock>
+                        <materialDesign:PackIcon Kind="ChevronDoubleLeft" />
+                    </StackPanel>
+                </StackPanel>
+                
+            </materialDesign:Card>
+            <materialDesign:Card Padding="24">
                 <StackPanel>
-                    <TextBlock FontSize="20">我可以做些什么？</TextBlock>
-                    <TextBlock Margin="10">■ 多个可选的的仿真实验</TextBlock>
-                    <TextBlock Margin="10">■ 可方便导出的实验数据</TextBlock>
-                    <TextBlock Margin="10">■ 可自定义的全局变量</TextBlock>
-                    <TextBlock Margin="10">■ 实时改变的实验参数与即时反馈</TextBlock>
-                    <TextBlock Margin="10">■ 与实验对应的原理解析与操作教程</TextBlock>
-
+                    <TextBlock FontSize="20"><Run Text="我可以做些什么？"/></TextBlock>
+                    <TextBlock Margin="10"><Run Text="■ 多个可选实验"/></TextBlock>
+                    <TextBlock Margin="10"><Run Text="■ 可实时改变实验参数"/></TextBlock>
+                    <TextBlock Margin="10"><Run Text="■ 可使用实时采集的音频数据"/></TextBlock>
+                    <TextBlock Margin="10"><Run Text="■ 可方便的导出实验图片和数据"/></TextBlock>
+                    <TextBlock Margin="10"><Run Text="■ 与实验对应的原理解析与操作教程"/></TextBlock>
                 </StackPanel>
             </materialDesign:Card>
-        </StackPanel>
-    </Grid>
+        </DockPanel>
+    </StackPanel>
 </UserControl>
