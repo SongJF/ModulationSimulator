@@ -30,11 +30,16 @@
             </stGui:AudioInput>
             <StackPanel Orientation="Horizontal" Margin="1">
                 <TextBlock FontSize="12" Margin="1">图表缩放:</TextBlock>
-                <Button Height="20" FontSize="10" Margin="15 1 1 1">X+</Button>
-                <Button Height="20" FontSize="10" Margin="2 1 1 1">X-</Button>
-                <Button Height="20" FontSize="10" Margin="15 1 1 1">Y+</Button>
-                <Button Height="20" FontSize="10" Margin="2 1 1 1">Y-</Button>
-                <Button Height="20" FontSize="10" Margin="20 1 1 1">Auto</Button>
+                <Button Height="20" FontSize="10" Margin="15 1 1 1" 
+                        Tag="{x:Static local:ChartZoomOption.XPlus}" Click="Click_Zoom">X+</Button>
+                <Button Height="20" FontSize="10" Margin="2 1 1 1"
+                        Tag="{x:Static local:ChartZoomOption.XMinus}" Click="Click_Zoom">X-</Button>
+                <Button Height="20" FontSize="10" Margin="15 1 1 1" 
+                        Tag="{x:Static local:ChartZoomOption.YPlus}" Click="Click_Zoom">Y+</Button>
+                <Button Height="20" FontSize="10" Margin="2 1 1 1" 
+                        Tag="{x:Static local:ChartZoomOption.YMinus}" Click="Click_Zoom">Y-</Button>
+                <Button Height="20" FontSize="10" Margin="20 1 1 1" 
+                        Tag="{x:Static local:ChartZoomOption.Auto}" Click="Click_Zoom">Auto</Button>
             </StackPanel>
         </StackPanel>
         <Grid Grid.Row="1" Name="gridChart" SizeChanged="gridChart_SizeChanged" />

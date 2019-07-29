@@ -466,6 +466,35 @@ namespace ChartCanvas
             }
         }
         #endregion
+
+        private void Click_Zoom(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button == null || m_aSpectrograms2D_signal == null ||
+                m_aSpectrograms2D_source == null || m_aWaveformMonitors == null)
+                return;
+
+            switch (button.Tag)
+            {
+                case ChartZoomOption.XMinus:
+                    m_aWaveformMonitors.SetXLenZoom(2.0);
+                    break;
+                case ChartZoomOption.XPlus:
+                    m_aWaveformMonitors.SetXLenZoom(0.5);
+                    break;
+                case ChartZoomOption.YMinus:
+                    m_aWaveformMonitors.SetYLenZoom(2.0);
+                    break;
+                case ChartZoomOption.YPlus:
+                    m_aWaveformMonitors.SetYLenZoom(0.5);
+                    break;
+                case ChartZoomOption.Auto:
+                    m_aWaveformMonitors.FitView();
+                    //m_aSpectrograms2D_signal.FitView();
+                    //m_aSpectrograms2D_source.FitView();
+                    break;
+            }
+        }
     }
 
     public enum ImageSaveMode
@@ -473,6 +502,15 @@ namespace ChartCanvas
         Wave = 0,
         SourceSpectrograms = 1,
         SignalSpectrograms = 2
+    }
+
+    public enum ChartZoomOption
+    {
+        XPlus = 0,
+        XMinus = 1,
+        YPlus = 2,
+        YMinus = 3,
+        Auto = 4
     }
 
     public class Param_AM

@@ -217,8 +217,13 @@ namespace ChartCanvas.Utils
         /// </summary>
         public void FitView()
         {
-            bool scaleChanged = false;
-            _chart.ViewXY.YAxes[0].Fit(0.0, out scaleChanged, true, false);
+            foreach(var item in _chart.ViewXY.YAxes)
+            {
+                bool scaleChanged = false;
+                item.Fit(0.0,out scaleChanged, true, false);
+            }
+            //bool scaleChanged = false;
+            //_chart.ViewXY.YAxes[0].Fit(0.0, out scaleChanged, true, false);
         }
 
         /// <summary>
@@ -258,9 +263,13 @@ namespace ChartCanvas.Utils
         public void SetYLenZoom(double factor)
         {
             _chart.BeginUpdate();
-            double dYLen = (_chart.ViewXY.YAxes[0].Maximum - _chart.ViewXY.YAxes[0].Minimum) * factor;
+            foreach(var item in _chart.ViewXY.YAxes)
+            {
+                item.SetRange(item.Minimum * factor, item.Maximum * factor);
+            }
+            //double dYLen = (_chart.ViewXY.YAxes[0].Maximum - _chart.ViewXY.YAxes[0].Minimum) * factor;
 
-            _chart.ViewXY.YAxes[0].SetRange(_chart.ViewXY.YAxes[0].Minimum * factor, _chart.ViewXY.YAxes[0].Maximum * factor);
+            //_chart.ViewXY.YAxes[0].SetRange(_chart.ViewXY.YAxes[0].Minimum * factor, _chart.ViewXY.YAxes[0].Maximum * factor);
 
             _chart.EndUpdate();
         }
