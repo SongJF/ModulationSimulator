@@ -29,13 +29,9 @@ namespace ChartCanvas
         /// </summary>
         private SpectrogramViewXYIntensity m_aSpectrograms2D_signal;
         /// <summary>
-        /// FFT计算辅助类(源)
+        /// FFT计算辅助类
         /// </summary>
-        private RealtimeFFTCalculator m_fftCalculator_source;
-        /// <summary>
-        /// FFT计算辅助类(信号)
-        /// </summary>
-        private RealtimeFFTCalculator m_fftCalculator_signal;
+        private RealtimeFFTCalculator m_fftCalculator;
         /// <summary>
         /// 采样频率
         /// </summary>
@@ -154,29 +150,19 @@ namespace ChartCanvas
             }
 
             //Feed multi-channel data to FFT calculator. If it gives a calculated result, set multi-channel result in the selected FFT chart
-            if (m_fftCalculator_source != null)
+            if (m_fftCalculator != null)
             {
                 double[][][] yValues;
                 double[][][] xValues;
 
-                if (m_fftCalculator_source.FeedDataAndCalculate(samples, out xValues, out yValues))
+                double[][] data = new double[2][];
+                data[0] = souceWave;
+                data[1] = modulatedWava;
+                if (m_fftCalculator.FeedDataAndCalculate(data, out xValues, out yValues))
                 {
                     int rowCount = xValues.Length;
-                     m_aSpectrograms2D_source.SetData(yValues, 0, rowCount);
-                }
-            }
-
-            if(m_fftCalculator_signal != null)
-            {
-                double[][][] yValues;
-                double[][][] xValues;
-
-                if (m_fftCalculator_signal.FeedDataAndCalculate(
-                   new double[1][] { modulatedWava },
-                   out xValues, out yValues))
-                {
-                    int rowCount = xValues.Length;
-                    m_aSpectrograms2D_signal.SetData(yValues, 0, rowCount);
+                    m_aSpectrograms2D_source.SetData(yValues, 0, rowCount);
+                    m_aSpectrograms2D_signal.SetData(yValues, 1, rowCount);
                 }
             }
 
@@ -304,14 +290,10 @@ namespace ChartCanvas
         /// </summary>
         private void InitFFTCalculator()
         {
-            if (m_fftCalculator_source != null)
-                m_fftCalculator_source.Dispose();
-            if (m_fftCalculator_signal != null)
-                m_fftCalculator_signal.Dispose();
-            m_fftCalculator_source = new RealtimeFFTCalculator(m_iFFTCalcIntervalMs,
-                _samplingFrequency, m_iFFTWindowLength, 1);
-            m_fftCalculator_signal = new RealtimeFFTCalculator(m_iFFTCalcIntervalMs,
-                _samplingFrequency, m_iFFTWindowLength, 1);
+            if (m_fftCalculator != null)
+                m_fftCalculator.Dispose();
+            m_fftCalculator = new RealtimeFFTCalculator(m_iFFTCalcIntervalMs,
+                _samplingFrequency, m_iFFTWindowLength, 2);
         }
 
         /// <summary>
@@ -373,16 +355,10 @@ namespace ChartCanvas
                     m_aSpectrograms2D_signal = null;
                 }
 
-                if (m_fftCalculator_source != null)
+                if (m_fftCalculator != null)
                 {
-                    m_fftCalculator_source.Dispose();
-                    m_fftCalculator_source = null;
-                }
-
-                if (m_fftCalculator_signal != null)
-                {
-                    m_fftCalculator_signal.Dispose();
-                    m_fftCalculator_signal = null;
+                    m_fftCalculator.Dispose();
+                    m_fftCalculator = null;
                 }
 
                 // Disposing of unmanaged resources done.
