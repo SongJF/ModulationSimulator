@@ -69,7 +69,7 @@ namespace ModulationSimulator.Pages
         {
             try
             {
-                _Exp.ChartToImage(ImageSaveMode.Wave);
+                _Exp.ChartToImage(ImageSaveOption.Wave);
             }
             catch(Exception ex)
             {
@@ -82,7 +82,7 @@ namespace ModulationSimulator.Pages
         {
             try
             {
-                _Exp.ChartToImage(ImageSaveMode.SourceSpectrograms);
+                _Exp.ChartToImage(ImageSaveOption.SourceSpectrograms);
             }
             catch (Exception ex)
             {
@@ -95,7 +95,7 @@ namespace ModulationSimulator.Pages
         {
             try
             {
-                _Exp.ChartToImage(ImageSaveMode.SignalSpectrograms);
+                _Exp.ChartToImage(ImageSaveOption.SignalSpectrograms);
                 MainWindow.SnakeMessage("保存成功！");
 
             }

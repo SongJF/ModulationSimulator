@@ -371,19 +371,19 @@ namespace ChartCanvas
         /// 保存为图片
         /// </summary>
         /// <param name="Chart"></param>
-        public void ChartToImage(ImageSaveMode mode)
+        public void ChartToImage(ImageSaveOption mode)
         {
             LightningChartUltimate Chart;
 
             switch(mode)
             {
-                case ImageSaveMode.Wave:
+                case ImageSaveOption.Wave:
                     Chart = m_aWaveformMonitors.Chart;
                     break;
-                case ImageSaveMode.SignalSpectrograms:
+                case ImageSaveOption.SignalSpectrograms:
                     Chart = m_aSpectrograms2D_signal.Chart;
                     break;
-                case ImageSaveMode.SourceSpectrograms:
+                case ImageSaveOption.SourceSpectrograms:
                     Chart = m_aSpectrograms2D_source.Chart;
                     break;
                 default:
@@ -471,31 +471,5 @@ namespace ChartCanvas
                     break;
             }
         }
-    }
-
-    public enum ImageSaveMode
-    {
-        Wave = 0,
-        SourceSpectrograms = 1,
-        SignalSpectrograms = 2
-    }
-
-    public enum ChartZoomOption
-    {
-        XPlus = 0,
-        XMinus = 1,
-        YPlus = 2,
-        YMinus = 3,
-        Auto = 4
-    }
-
-    public class Param_AM
-    {
-        public Param_AM(double _moudulateFrequency)
-        {
-            moudulateFrequency = _moudulateFrequency;
-        }
-
-        public double moudulateFrequency { get; set; }
     }
 }
