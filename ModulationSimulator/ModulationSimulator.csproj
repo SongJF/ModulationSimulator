@@ -83,6 +83,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Exp_PCM.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Exp_Spectrum.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -95,6 +99,9 @@
   <ItemGroup>
     <Compile Include="Pages\Exp_AM.xaml.cs">
       <DependentUpon>Exp_AM.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Exp_PCM.xaml.cs">
+      <DependentUpon>Exp_PCM.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Exp_Spectrum.xaml.cs">
       <DependentUpon>Exp_Spectrum.xaml</DependentUpon>

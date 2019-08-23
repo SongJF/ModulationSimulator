@@ -88,6 +88,9 @@
     <Compile Include="Chart_AM.xaml.cs">
       <DependentUpon>Chart_AM.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Chart_PCM.xaml.cs">
+      <DependentUpon>Chart_PCM.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Params.cs" />
     <Compile Include="Utils\ExcelWriter.cs" />
     <Compile Include="Utils\RealtimeFFTCalculator.cs" />
@@ -127,6 +130,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Chart_AM.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Chart_PCM.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
