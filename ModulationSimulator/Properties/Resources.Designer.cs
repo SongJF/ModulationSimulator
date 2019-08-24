@@ -79,11 +79,11 @@ namespace ModulationSimulator.Properties {
         }
         
         /// <summary>
-        ///   查找类似 设置 的本地化字符串。
+        ///   查找类似 PCM编码 的本地化字符串。
         /// </summary>
-        public static string MenuName_Settings {
+        public static string MenuName_PCM {
             get {
-                return ResourceManager.GetString("MenuName_Settings", resourceCulture);
+                return ResourceManager.GetString("MenuName_PCM", resourceCulture);
             }
         }
         
