@@ -43,7 +43,7 @@ namespace ChartCanvas
         /// <summary>
         /// 本次实验的可调参数
         /// </summary>
-        private Param_PCM Param;
+        public Param_PCM Param { get; set; }
         #endregion
 
         /// <summary>
