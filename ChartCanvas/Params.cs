@@ -31,4 +31,13 @@ namespace ChartCanvas
 
         public double moudulateFrequency { get; set; }
     }
+
+    public class Param_PCM
+    {
+        public Param_PCM(double _secSamplingFrequency)
+        {
+            secSamplingFrequency = _secSamplingFrequency;
+        }
+        public double secSamplingFrequency { get; set; }
+    }
 }
