@@ -122,7 +122,6 @@ namespace ChartCanvas
                 else sampledWave[i] = 0.0;
             }
 
-            var x = PCM_Encode(sampledData);
                 
 
             //为示波器输入数据
@@ -135,11 +134,12 @@ namespace ChartCanvas
             }
 
             List<double> pcmCode = new List<double>();
-            foreach(var item in PCM_Encode(sampledData))
+            foreach(var item in sampledData)
             {
-                foreach(var val in item)
+                int[] codes = PCM_Encode(item);
+                foreach(var code in codes)
                 {
-                    pcmCode.Add(val);
+                    pcmCode.Add(code);
                 }
             }
             //为示波器输入数据
@@ -264,82 +264,86 @@ namespace ChartCanvas
         /// </summary>
         /// <param name="data">PCM源数据</param>
         /// <returns>PCM编码</returns>
-        private List<int[]> PCM_Encode(List<double> data)
+        private int[] PCM_Encode(double data)
         {
-            List<int[]> answer = new List<int[]>();
-            foreach(var item in data)
+            int value = (int)data % 2048;
+
+            //极性码
+            int[] ans = new int[8];
+            if (value > 0) ans[0] = 1;
+            else ans[0] = 0;
+
+            value = Math.Abs(value);
+
+            //段落码
+
+            //量化间隔
+            int step;
+            //起始电平
+            int st;
+            if (0 <= value && value < 16)
             {
-                int value = (int)item % 2048;
-
-                //极性码
-                int[] ans = new int[8];
-                if (value > 0) ans[0] = 1;
-                else ans[0] = 0;
-
-                value = Math.Abs(value);
-
-                //段落码
-
-                //量化间隔
-                int step;
-                //起始电平
-                int st;
-                if (0 <= value && value < 16)
-                {
-                    ans = setSectionCode(ans, 1, "000");
-                    step = 1;
-                    st = 0;
-                }
-                else if (16 <= value && value < 32)
-                {
-                    ans = setSectionCode(ans, 1, "001");
-                    step = 1;
-                    st = 16;
-                }
-                else if (32 <= value && value < 64)
-                {
-                    ans = setSectionCode(ans, 1, "010");
-                    step = 2;
-                    st = 32;
-                }
-                else if (64 <= value && value <128)
-                {
-                    ans = setSectionCode(ans, 1, "011");
-                    step = 4;
-                    st = 64;
-                }
-                else if(128 <= value && value < 256)
-                {
-                    ans = setSectionCode(ans, 1, "100");
-                    step = 8;
-                    st = 128;
-                }
-                else if(256 <= value && value < 512)
-                {
-                    ans = setSectionCode(ans, 1, "101");
-                    step = 16;
-                    st = 256;
-                }
-                else if (512 <= value && value < 1024)
-                {
-                    ans = setSectionCode(ans, 1, "110");
-                    step = 32;
-                    st = 512;
-                }
-                else
-                {
-                    ans = setSectionCode(ans, 1, "111");
-                    step = 64;
-                    st = 1024;
-                }
-
-                //段内码
-                var insideCode = (int)Math.Floor((double)((value - st) / step));
-                ans = setSectionCode(ans, 4, Convert.ToString(insideCode, 2));
-
-                answer.Add(ans);
+                ans = setSectionCode(ans, 1, "000");
+                step = 1;
+                st = 0;
             }
-            return answer;
+            else if (16 <= value && value < 32)
+            {
+                ans = setSectionCode(ans, 1, "001");
+                step = 1;
+                st = 16;
+            }
+            else if (32 <= value && value < 64)
+            {
+                ans = setSectionCode(ans, 1, "010");
+                step = 2;
+                st = 32;
+            }
+            else if (64 <= value && value <128)
+            {
+                ans = setSectionCode(ans, 1, "011");
+                step = 4;
+                st = 64;
+            }
+            else if(128 <= value && value < 256)
+            {
+                ans = setSectionCode(ans, 1, "100");
+                step = 8;
+                st = 128;
+            }
+            else if(256 <= value && value < 512)
+            {
+                ans = setSectionCode(ans, 1, "101");
+                step = 16;
+                st = 256;
+            }
+            else if (512 <= value && value < 1024)
+            {
+                ans = setSectionCode(ans, 1, "110");
+                step = 32;
+                st = 512;
+            }
+            else
+            {
+                ans = setSectionCode(ans, 1, "111");
+                step = 64;
+                st = 1024;
+            }
+
+            //段内码
+            var insideCode = Convert.ToString(((int)Math.Floor((double)((value - st) / step))),2);
+            if(insideCode.Length < 4)
+            {
+                string tmp = "";
+                for(int i = 0; i < 4 - insideCode.Length; i++)
+                {
+                    tmp += "0";
+                }
+                insideCode = tmp + insideCode;
+            }
+            ans = setSectionCode(ans, 4, insideCode);
+
+            return ans;
         }
 
         /// <summary>
@@ -417,6 +421,28 @@ namespace ChartCanvas
                     m_WaveformMonitor.Dispose();
                     m_WaveformMonitor = null;
                 }
+            }
+        }
+
+        private void TextChange_InputVal(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            if (tb.Text == null) return;
+
+            try
+            {
+                double val = double.Parse(tb.Text);
+                int[] codes = PCM_Encode(val);
+                string ans = "|";
+                foreach (var code in codes)
+                {
+                    ans = ans + " " + code.ToString() + " |";
+                }
+                EncodeStrTextBlock.Text = ans;
+            }
+            catch(Exception ex)
+            {
+                return;
             }
         }
     }

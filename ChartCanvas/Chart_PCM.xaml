@@ -42,6 +42,23 @@
                         Tag="{x:Static local:ChartZoomOption.Auto}" Click="Click_Zoom">Auto</Button>
             </StackPanel>
         </StackPanel>
-        <Grid Grid.Row="1" Name="gridChart" SizeChanged="gridChart_SizeChanged" />
+        <Grid Grid.Row="1" Name="gridChart" SizeChanged="gridChart_SizeChanged" Width="460" HorizontalAlignment="Left"/>
+        <GroupBox Grid.Row="1" Width="460" 
+                  Header="PCM编码计算器"
+                  HorizontalAlignment="Left" 
+                  Margin="470 0 10 20">
+            <StackPanel>
+                <StackPanel Margin="10" Orientation="Horizontal">
+                    <TextBlock Margin="50 10 20 0">输入欲编码值</TextBlock>
+                    <TextBox Width="200" HorizontalContentAlignment="Center" 
+                             TextChanged="TextChange_InputVal"
+                             Text="0"/>
+                </StackPanel>
+                <StackPanel Margin="10" Orientation="Horizontal">
+                    <TextBlock Margin="50 10 20 0">编码结果</TextBlock>
+                    <TextBlock Margin="35 10 20 0" Text="| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |" x:Name="EncodeStrTextBlock"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </UserControl>
