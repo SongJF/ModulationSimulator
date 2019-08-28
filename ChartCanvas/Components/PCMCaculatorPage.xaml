@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="ChartCanvas.Components.PCMCaculatorPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChartCanvas.Components"
+             xmlns:lcusb="http://schemas.arction.com/semibindablecharting/ultimate/" 
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="800">
+    <Grid>
+        <GroupBox Header="PCM编码计算器">
+            <StackPanel HorizontalAlignment="Stretch">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock Margin="50 10 20 0">输入欲编码值</TextBlock>
+                    <TextBox Width="200" HorizontalContentAlignment="Center" 
+                             TextChanged="TextChange_InputVal"
+                             Text="0"/>
+                </StackPanel>
+                <DockPanel HorizontalAlignment="Center" Margin="10">
+                    <TextBlock Margin="50 10 20 0">编码结果</TextBlock>
+                    <TextBlock Margin="35 10 20 0" Text="| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |" x:Name="EncodeStrTextBlock"/>
+                </DockPanel>
+                <lcusb:LightningChartUltimate ChartName="PCM码显示器" 
+                                              x:Name="Monitor" Height="400">
+                    <lcusb:LightningChartUltimate.ViewXY>
+                        <lcusb:ViewXY>
+                            <lcusb:ViewXY.XAxes>
+                                <lcusb:AxisX  Maximum="8" ScrollMode="None" ValueType="Number">
+                                    <lcusb:AxisX.Title>
+                                        <lcusb:AxisXTitle Visible="False"/>
+                                    </lcusb:AxisX.Title>
+                                </lcusb:AxisX>
+                            </lcusb:ViewXY.XAxes>
+                            <lcusb:ViewXY.YAxes>
+                                <lcusb:AxisY Maximum="1.5" Minimum="-0.5">
+                                    <lcusb:AxisY.Title>
+                                        <lcusb:AxisYTitle Visible="False"/>
+                                    </lcusb:AxisY.Title>
+                                </lcusb:AxisY>
+                            </lcusb:ViewXY.YAxes>
+                            <lcusb:ViewXY.PointLineSeries>
+                                <lcusb:PointLineSeries PointsVisible="False">
+                                </lcusb:PointLineSeries>
+                            </lcusb:ViewXY.PointLineSeries>
+                        </lcusb:ViewXY>
+                    </lcusb:LightningChartUltimate.ViewXY>
+                </lcusb:LightningChartUltimate>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>
