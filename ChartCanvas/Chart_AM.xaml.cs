@@ -21,13 +21,21 @@ namespace ChartCanvas
         /// </summary>
         private WaveformMonitor m_aWaveformMonitors;
         /// <summary>
-        /// 频谱仪(源)
+        /// 频谱仪(热力/源)
         /// </summary>
         private SpectrogramViewXYIntensity m_aSpectrograms2D_source;
         /// <summary>
-        /// 频谱仪(信号)
+        /// 频谱仪(热力/信号)
         /// </summary>
         private SpectrogramViewXYIntensity m_aSpectrograms2D_signal;
+        /// <summary>
+        /// 频谱仪(源)
+        /// </summary>
+        private AreaSpectrumMonitor m_AreaSpectrum_souce;
+        /// <summary>
+        /// 频谱仪(信号)
+        /// </summary>
+        private AreaSpectrumMonitor m_AreaSpectrum_signal;
         /// <summary>
         /// FFT计算辅助类
         /// </summary>
@@ -63,6 +71,8 @@ namespace ChartCanvas
         {
             m_aSpectrograms2D_source = null;
             m_aSpectrograms2D_signal = null;
+            m_AreaSpectrum_signal = null;
+            m_AreaSpectrum_souce = null;
             m_aWaveformMonitors = null;
             m_iFFTCalcIntervalMs = 20;
             m_iFFTWindowLength = 1024 * 4;
@@ -90,6 +100,7 @@ namespace ChartCanvas
         /// <summary>
         /// 音频输入开始
         /// </summary>
+        [Obsolete]
         private void AudioInput_Started(StartedEventArgs args)
         {
             _samplingFrequency = (int)args.SamplesPerSecond;
@@ -162,7 +173,9 @@ namespace ChartCanvas
                 {
                     int rowCount = xValues.Length;
                     m_aSpectrograms2D_source.SetData(yValues, 0, rowCount);
+                    m_AreaSpectrum_souce.SetData(xValues[0][0], yValues[0][0]);
                     m_aSpectrograms2D_signal.SetData(yValues, 1, rowCount);
+                    m_AreaSpectrum_signal.SetData(xValues[0][1], yValues[0][1]);
                 }
             }
 
@@ -228,6 +241,7 @@ namespace ChartCanvas
         /// <summary>
         /// 初始化频谱仪
         /// </summary>
+        [Obsolete]
         private void InitSpectrograms()
         {
             DisposeSpectrograms();
@@ -251,7 +265,7 @@ namespace ChartCanvas
                 m_iHighFreq,
                 strTitle,
                 DefaultColors.SeriesForBlackBackgroundWpf[0]);
-            m_aSpectrograms2D_source.Chart.ChartName = "频谱仪(源)";
+            m_aSpectrograms2D_source.Chart.ChartName = "频谱仪(热力/源)";
 
             m_aSpectrograms2D_signal = new SpectrogramViewXYIntensity(
                 gridChart,
@@ -263,7 +277,19 @@ namespace ChartCanvas
                 m_iHighFreq,
                 strTitle,
                 DefaultColors.SeriesForBlackBackgroundWpf[0]);
-            m_aSpectrograms2D_signal.Chart.ChartName = "频谱仪(信号)";
+            m_aSpectrograms2D_signal.Chart.ChartName = "频谱仪(热力/信号)";
+
+            m_AreaSpectrum_souce = new AreaSpectrumMonitor(
+                gridChart, resolution, m_iHighFreq,
+                strTitle, DefaultColors.SeriesForBlackBackgroundWpf[0]
+                );
+            m_AreaSpectrum_souce.Chart.ChartName = "频谱仪(源)";
+
+            m_AreaSpectrum_signal = new AreaSpectrumMonitor(
+                gridChart, resolution, m_iHighFreq,
+                strTitle, DefaultColors.SeriesForBlackBackgroundWpf[1]
+                );
+            m_AreaSpectrum_signal.Chart.ChartName = "频谱仪(信号)";
 
             ArrangeMonitors();
         }
@@ -282,6 +308,17 @@ namespace ChartCanvas
             {
                 m_aSpectrograms2D_signal.Dispose();
                 m_aSpectrograms2D_signal = null;
+            }
+
+            if (m_AreaSpectrum_souce != null)
+            {
+                m_AreaSpectrum_souce.Dispose();
+                m_AreaSpectrum_souce = null;
+            }
+            if (m_AreaSpectrum_signal != null)
+            {
+                m_AreaSpectrum_signal.Dispose();
+                m_AreaSpectrum_signal = null;
             }
         }
 
@@ -312,8 +349,11 @@ namespace ChartCanvas
             int chartWidth = 460;
             int chartHeight = 540;
             m_aWaveformMonitors.SetBounds(0, 0, chartWidth, chartHeight);
-            m_aSpectrograms2D_source.SetBounds(chartWidth + 5, 0, chartWidth, chartHeight/2);
-            m_aSpectrograms2D_signal.SetBounds(chartWidth + 5, chartHeight / 2, chartWidth, chartHeight / 2);
+
+            m_aSpectrograms2D_source.SetBounds(chartWidth + 5, 0, chartWidth, chartHeight / 4);
+            m_AreaSpectrum_souce.SetBounds(chartWidth + 5, chartHeight / 4, chartWidth, chartHeight / 4);
+            m_aSpectrograms2D_signal.SetBounds(chartWidth + 5, chartHeight / 2, chartWidth, chartHeight / 4);
+            m_AreaSpectrum_signal.SetBounds(chartWidth + 5, chartHeight * 3 / 4, chartWidth, chartHeight / 4);
         }
 
         /// <summary>
@@ -338,22 +378,9 @@ namespace ChartCanvas
             {
                 gridChart.Children.Clear();
 
-                if (m_aWaveformMonitors != null)
-                {
-                    m_aWaveformMonitors.Dispose();
-                    m_aWaveformMonitors = null;
-                }
+                DisposeWaveformMonitors();
 
-                if (m_aSpectrograms2D_source != null)
-                {
-                    m_aSpectrograms2D_source.Dispose();
-                    m_aSpectrograms2D_source = null;
-                }
-                if (m_aSpectrograms2D_signal != null)
-                {
-                    m_aSpectrograms2D_signal.Dispose();
-                    m_aSpectrograms2D_signal = null;
-                }
+                DisposeSpectrograms();
 
                 if (m_fftCalculator != null)
                 {

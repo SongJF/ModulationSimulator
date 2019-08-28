@@ -95,6 +95,7 @@
       <DependentUpon>PCMCaculatorPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Params.cs" />
+    <Compile Include="Utils\AreaSpectrumMonitor.cs" />
     <Compile Include="Utils\ExcelWriter.cs" />
     <Compile Include="Utils\PCMCaculator.cs" />
     <Compile Include="Utils\RealtimeFFTCalculator.cs" />
